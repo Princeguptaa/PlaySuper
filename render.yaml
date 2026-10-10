@@ -1,0 +1,12 @@
+services:
+  - type: static
+    name: playsuper-goal-store
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: NODE_VERSION
+        value: 20.18.0
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

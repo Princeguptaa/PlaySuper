@@ -49,3 +49,37 @@ This is the interactive prototype for the Goal Store, addressing key challenges 
 - All data is persisted in the browser's `localStorage`.
 - The prototype assumes a mobile-first or tablet layout for the core game/store flow, wrapped in a Phone Frame on desktop.
 - Brand names and images are illustrative.
+
+## Deploying on Render
+
+This project is fully configured for deployment as a **Static Site** on [Render](https://render.com).
+
+### Option 1: Automatic Deployment via Blueprint (Recommended)
+1. Push your changes to GitHub / GitLab.
+2. Log into [Render Dashboard](https://dashboard.render.com).
+3. Click **New +** -> **Blueprint**.
+4. Connect this repository (`PlaySuper`).
+5. Render will automatically read [`render.yaml`](./render.yaml) and configure:
+   - **Service Type**: Static Site
+   - **Build Command**: `npm install && npm run build`
+   - **Publish Directory**: `dist`
+   - **Node Version**: `20.18.0`
+   - **SPA Routing**: Rewrites `/*` to `/index.html`
+6. Click **Apply** to deploy.
+
+### Option 2: Manual Setup in Render Dashboard
+1. Log into [Render Dashboard](https://dashboard.render.com).
+2. Click **New +** -> **Static Site**.
+3. Connect your repository.
+4. Set the following settings:
+   - **Name**: `playsuper-goal-store` (or your preferred name)
+   - **Branch**: `main`
+   - **Build Command**: `npm install && npm run build`
+   - **Publish Directory**: `dist`
+5. Under **Advanced** / **Environment Variables**:
+   - Add `NODE_VERSION` with value `20.18.0`.
+6. Under **Redirects/Rewrites**:
+   - **Type**: `Rewrite`
+   - **Source**: `/*`
+   - **Destination**: `/index.html`
+7. Click **Create Static Site**.
