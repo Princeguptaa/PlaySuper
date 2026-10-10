@@ -2,7 +2,8 @@ import React from 'react';
 import { useAppStore } from '../state/useAppStore';
 
 export const EconomyMeter: React.FC = () => {
-  const { ledger, balance } = useAppStore(state => state);
+  const ledger = useAppStore(state => state.ledger);
+  const balance = useAppStore(state => state.balance);
   const roundsPlayed = useAppStore(state => state.session.roundsPlayed);
   
   const totalEarned = ledger.filter(l => l.type === 'earn').reduce((sum, l) => sum + l.amount, 0);

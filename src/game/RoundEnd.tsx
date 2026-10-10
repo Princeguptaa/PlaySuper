@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useAppStore } from '../state/useAppStore';
 import { motion } from 'framer-motion';
 import { evaluateNudge, NudgeResult } from '../nudges/NudgeEngine';
@@ -15,8 +15,12 @@ interface RoundEndProps {
 export const RoundEnd: React.FC<RoundEndProps> = ({ hits, combo, coinsEarned, onPlayAgain, onOpenStore }) => {
   const reducedMotion = typeof window !== 'undefined' ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false;
   const [nudge, setNudge] = useState<NudgeResult | null>(null);
+  const hasLoggedRef = useRef(false);
 
   useEffect(() => {
+    if (hasLoggedRef.current) return;
+    hasLoggedRef.current = true;
+
     useAppStore.getState().logEvent({
       event_name: 'round_completed',
       source: 'user',

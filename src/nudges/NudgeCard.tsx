@@ -10,7 +10,8 @@ interface NudgeCardProps {
 }
 
 export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onDismiss }) => {
-  const { logEvent, navigate } = useAppStore();
+  const logEvent = useAppStore(state => state.logEvent);
+  const navigate = useAppStore(state => state.navigate);
   const shownLogged = useRef(false);
 
   useEffect(() => {

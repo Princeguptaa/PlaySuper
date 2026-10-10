@@ -2,10 +2,8 @@ import React from 'react';
 import { useAppStore } from '../state/useAppStore';
 
 export const LensFAB: React.FC = () => {
-  const { setLensOpen, lensOpen } = useAppStore(state => ({
-    setLensOpen: state.setLensOpen,
-    lensOpen: state.ui.lensOpen
-  }));
+  const setLensOpen = useAppStore(state => state.setLensOpen);
+  const lensOpen = useAppStore(state => state.ui.lensOpen);
 
   if (lensOpen) return null;
 

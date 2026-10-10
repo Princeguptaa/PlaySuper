@@ -10,10 +10,8 @@ const TOUR_STEPS = [
 ];
 
 export const GuidedTour: React.FC = () => {
-  const { tourDone, screen } = useAppStore(state => ({
-    tourDone: state.ui.tourDone,
-    screen: state.ui.screen,
-  }));
+  const tourDone = useAppStore(state => state.ui.tourDone);
+  const screen = useAppStore(state => state.ui.screen);
   
   const [step, setStep] = useState(0);
 
@@ -30,11 +28,13 @@ export const GuidedTour: React.FC = () => {
     }
   }, [screen, step, tourDone]);
 
-  if (tourDone) return null;
-  if (step >= TOUR_STEPS.length) {
-    useAppStore.setState(state => ({ ui: { ...state.ui, tourDone: true } }));
-    return null;
-  }
+  useEffect(() => {
+    if (step >= TOUR_STEPS.length && !tourDone) {
+      useAppStore.setState(state => ({ ui: { ...state.ui, tourDone: true } }));
+    }
+  }, [step, tourDone]);
+
+  if (tourDone || step >= TOUR_STEPS.length) return null;
 
   const currentStep = TOUR_STEPS[step];
 

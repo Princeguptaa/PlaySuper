@@ -2,11 +2,9 @@ import React from 'react';
 import { useAppStore } from '../state/useAppStore';
 
 export const SkinSwitcher: React.FC = () => {
-  const { skin, switchSkin, logEvent } = useAppStore(state => ({
-    skin: state.ui.skin,
-    switchSkin: state.switchSkin,
-    logEvent: state.logEvent
-  }));
+  const skin = useAppStore(state => state.ui.skin);
+  const switchSkin = useAppStore(state => state.switchSkin);
+  const logEvent = useAppStore(state => state.logEvent);
 
   const handleSwitch = (newSkin: 'neon' | 'jungle' | 'retail') => {
     switchSkin(newSkin);

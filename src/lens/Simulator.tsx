@@ -7,7 +7,8 @@ export const Simulator: React.FC = () => {
   const [priceMultiplier, setPriceMultiplier] = useState(1.0);
   const [roundsPerDay, setRoundsPerDay] = useState(15);
   
-  const { earnCoins, logEvent } = useAppStore(state => state);
+  const earnCoins = useAppStore(state => state.earnCoins);
+  const logEvent = useAppStore(state => state.logEvent);
 
   // Derive outputs
   const dailyEarn = coinsPerRound * roundsPerDay;

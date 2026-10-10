@@ -9,14 +9,12 @@ import { SkinSwitcher } from './SkinSwitcher';
 import { HypothesisCard } from './HypothesisCard';
 
 export const LensPanel: React.FC = () => {
-  const { lensOpen, setLensOpen, variant, switchVariant, resetDemo, events } = useAppStore(state => ({
-    lensOpen: state.ui.lensOpen,
-    setLensOpen: state.setLensOpen,
-    variant: state.ui.variant,
-    switchVariant: state.switchVariant,
-    resetDemo: state.resetDemo,
-    events: state.events
-  }));
+  const lensOpen = useAppStore(state => state.ui.lensOpen);
+  const setLensOpen = useAppStore(state => state.setLensOpen);
+  const variant = useAppStore(state => state.ui.variant);
+  const switchVariant = useAppStore(state => state.switchVariant);
+  const resetDemo = useAppStore(state => state.resetDemo);
+  const events = useAppStore(state => state.events);
 
   const handleExport = () => {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(events, null, 2));

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { PulseTap } from './PulseTap';
 import { HUD } from './HUD';
 import { RoundEnd } from './RoundEnd';
@@ -10,29 +10,33 @@ export const GameScreen: React.FC = () => {
   const earnCoins = useAppStore(state => state.earnCoins);
   const navigate = useAppStore(state => state.navigate);
   const logEvent = useAppStore(state => state.logEvent);
+  const roundStartedLogged = useRef(false);
 
   useEffect(() => {
-    if (roundState === 'playing') {
+    if (roundState === 'playing' && !roundStartedLogged.current) {
+      roundStartedLogged.current = true;
       logEvent({
         event_name: 'round_started',
         source: 'user'
       });
+    } else if (roundState === 'ended') {
+      roundStartedLogged.current = false;
     }
   }, [roundState, logEvent]);
 
-  const handleRoundEnd = (hits: number, combo: number, coins: number) => {
+  const handleRoundEnd = useCallback((hits: number, combo: number, coins: number) => {
     setRoundStats({ hits, combo, coins });
     earnCoins(coins, `round-${Date.now()}`);
     setRoundState('ended');
-  };
+  }, [earnCoins]);
 
-  const handlePlayAgain = () => {
+  const handlePlayAgain = useCallback(() => {
     setRoundState('playing');
-  };
+  }, []);
 
-  const handleOpenStore = () => {
+  const handleOpenStore = useCallback(() => {
     navigate('store_home');
-  };
+  }, [navigate]);
 
   return (
     <div id="tour-step-1" className="relative w-full h-full bg-background overflow-hidden">

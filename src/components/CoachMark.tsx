@@ -28,7 +28,20 @@ export const CoachMark: React.FC<CoachMarkProps> = ({ targetId, text, step, tota
           }
         }
       }
-      setTargetRect(foundRect);
+      setTargetRect(prev => {
+        if (!foundRect && !prev) return null;
+        if (
+          foundRect &&
+          prev &&
+          Math.round(foundRect.top) === Math.round(prev.top) &&
+          Math.round(foundRect.left) === Math.round(prev.left) &&
+          Math.round(foundRect.width) === Math.round(prev.width) &&
+          Math.round(foundRect.height) === Math.round(prev.height)
+        ) {
+          return prev;
+        }
+        return foundRect;
+      });
     };
 
     updateRect();

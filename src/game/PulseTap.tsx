@@ -14,58 +14,79 @@ export const PulseTap: React.FC<{ onRoundEnd: (hits: number, combo: number, coin
   const [orbs, setOrbs] = useState<{ id: string; x: number; y: number }[]>([]);
   const [hits, setHits] = useState(0);
   const [currentCombo, setCurrentCombo] = useState(0);
-  const [longestCombo, setLongestCombo] = useState(0);
   
   const reducedMotion = typeof window !== 'undefined' ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false;
   const isPlaying = timeLeft > 0;
   const orbIdCounter = useRef(0);
+  const hasEndedRef = useRef(false);
+  const currentComboRef = useRef(0);
+  const longestComboRef = useRef(0);
 
   // Timer
   useEffect(() => {
     if (!isPlaying) return;
-    const timer = setInterval(() => setTimeLeft(t => t - 1), 1000);
+    const timer = setInterval(() => setTimeLeft(t => Math.max(0, t - 1)), 1000);
     return () => clearInterval(timer);
   }, [isPlaying]);
 
-  // Spawner
+  // Spawner - cleanly scheduled without creating multiple recursive branches
   useEffect(() => {
     if (!isPlaying) return;
-    const spawnOrb = () => {
+    let timerId: ReturnType<typeof setTimeout>;
+    let active = true;
+
+    const scheduleNext = () => {
+      const nextDelay = 450 + Math.random() * 350;
+      timerId = setTimeout(() => {
+        if (!active) return;
+        const id = `orb-${orbIdCounter.current++}`;
+        const x = Math.random() * (PLAY_AREA_W - ORB_RADIUS * 2);
+        const y = Math.random() * (PLAY_AREA_H - ORB_RADIUS * 2);
+        setOrbs(prev => [...prev, { id, x, y }]);
+        scheduleNext();
+      }, nextDelay);
+    };
+
+    timerId = setTimeout(() => {
+      if (!active) return;
       const id = `orb-${orbIdCounter.current++}`;
       const x = Math.random() * (PLAY_AREA_W - ORB_RADIUS * 2);
       const y = Math.random() * (PLAY_AREA_H - ORB_RADIUS * 2);
       setOrbs(prev => [...prev, { id, x, y }]);
-      
-      const nextSpawn = 450 + Math.random() * 350;
-      if (timeLeft > 0) setTimeout(spawnOrb, nextSpawn);
-    };
-    
-    const initialTimer = setTimeout(spawnOrb, 500);
-    return () => clearTimeout(initialTimer);
-  }, [isPlaying, timeLeft]);
+      scheduleNext();
+    }, 500);
 
-  // End Game
+    return () => {
+      active = false;
+      clearTimeout(timerId);
+    };
+  }, [isPlaying]);
+
+  // End Game - execute once when timer reaches 0
   useEffect(() => {
-    if (timeLeft === 0) {
-      const coins = calculateCoins(hits, longestCombo);
-      onRoundEnd(hits, longestCombo, coins);
+    if (timeLeft === 0 && !hasEndedRef.current) {
+      hasEndedRef.current = true;
+      const coins = calculateCoins(hits, longestComboRef.current);
+      onRoundEnd(hits, longestComboRef.current, coins);
     }
-  }, [timeLeft, hits, longestCombo, onRoundEnd]);
+  }, [timeLeft, hits, onRoundEnd]);
 
   const handleOrbTap = useCallback((id: string) => {
     setOrbs(prev => prev.filter(o => o.id !== id));
     setHits(h => h + 1);
-    setCurrentCombo(c => {
-      const newCombo = c + 1;
-      setLongestCombo(lc => Math.max(lc, newCombo));
-      if (newCombo === 5 || newCombo === 10) vibrate(100);
-      else vibrate(50);
-      return newCombo;
-    });
+    const newCombo = currentComboRef.current + 1;
+    currentComboRef.current = newCombo;
+    setCurrentCombo(newCombo);
+    if (newCombo > longestComboRef.current) {
+      longestComboRef.current = newCombo;
+    }
+    if (newCombo === 5 || newCombo === 10) vibrate(100);
+    else vibrate(50);
   }, []);
 
   const handleOrbExpire = useCallback((id: string) => {
     setOrbs(prev => prev.filter(o => o.id !== id));
+    currentComboRef.current = 0;
     setCurrentCombo(0);
   }, []);
 
