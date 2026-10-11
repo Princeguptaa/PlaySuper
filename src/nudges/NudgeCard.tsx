@@ -7,9 +7,10 @@ import { NudgeResult } from './NudgeEngine';
 interface NudgeCardProps {
   nudge: NudgeResult;
   onDismiss: () => void;
+  inline?: boolean;
 }
 
-export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onDismiss }) => {
+export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onDismiss, inline = false }) => {
   const logEvent = useAppStore(state => state.logEvent);
   const navigate = useAppStore(state => state.navigate);
   const shownLogged = useRef(false);
@@ -66,16 +67,20 @@ export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onDismiss }) => {
     if (nudge.type === 'N1_NEAR_GOAL') {
       // Play again -> dismisses nudge, starts round
       onDismiss();
-      // RoundEnd component already has a Play Again button, but NudgeCard overlays it.
-      // We can just call navigate to game, which effectively unmounts RoundEnd and starts a new GameScreen
       useAppStore.setState({ ui: { ...useAppStore.getState().ui, screen: 'game' } });
     } else if (nudge.type === 'N2_UNLOCK') {
       // Claim -> opens RewardDetail
       useAppStore.setState({ ui: { ...useAppStore.getState().ui, selectedRewardId: nudge.reward.id } });
       navigate('reward_detail');
     } else if (nudge.type === 'N3_FIRST_GOAL') {
-      // Browse rewards -> opens Store Home
+      // Browse rewards -> opens Store Home on the Quick wins rail
       navigate('store_home');
+      setTimeout(() => {
+        const el = document.getElementById('rail-quick-wins');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
     }
   };
 
@@ -102,9 +107,14 @@ export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onDismiss }) => {
 
   return (
     <motion.div
-      initial={reducedMotion ? { opacity: 1 } : { y: 20, opacity: 0 }}
+      initial={reducedMotion ? { opacity: 1 } : { y: inline ? 10 : 20, opacity: 0 }}
       animate={reducedMotion ? { opacity: 1 } : { y: 0, opacity: 1 }}
-      className="absolute bottom-6 left-4 right-4 bg-[var(--surface)] p-4 rounded-xl shadow-[0_-5px_30px_rgba(0,0,0,0.15)] border border-[var(--primary)]/50 z-50 flex flex-col gap-3"
+      style={{ position: inline ? 'relative' : 'absolute' }}
+      className={
+        inline
+          ? "relative w-full bg-[var(--bg)] p-3.5 rounded-xl border border-[var(--primary)]/50 z-10 flex flex-col gap-2.5 mb-3"
+          : "absolute bottom-6 left-4 right-4 bg-[var(--surface)] p-4 rounded-xl shadow-[0_-5px_30px_rgba(0,0,0,0.15)] border border-[var(--primary)]/50 z-50 flex flex-col gap-3"
+      }
     >
       <div className="flex justify-between items-start gap-2">
         <div className="flex items-center gap-3">
@@ -120,7 +130,7 @@ export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onDismiss }) => {
         </div>
         <button 
           onClick={handleDismiss}
-          className="w-6 h-6 rounded-full bg-[var(--bg)] flex items-center justify-center text-[var(--muted)] hover:text-[var(--text)] shrink-0"
+          className="w-6 h-6 rounded-full bg-[var(--surface)] flex items-center justify-center text-[var(--muted)] hover:text-[var(--text)] shrink-0"
         >
           ✕
         </button>
@@ -140,7 +150,7 @@ export const NudgeCard: React.FC<NudgeCardProps> = ({ nudge, onDismiss }) => {
           </>
         )}
         {nudge.type === 'N3_FIRST_GOAL' && (
-          <Button variant="primary" className="w-full py-2 text-sm" onClick={handlePrimaryClick}>Browse rewards</Button>
+          <Button variant="primary" className="w-full py-2 text-sm" onClick={handlePrimaryClick}>Pick a goal</Button>
         )}
       </div>
     </motion.div>

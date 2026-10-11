@@ -24,7 +24,7 @@ export const CategoryChips: React.FC<CategoryChipsProps> = ({ selectedCategory, 
   };
 
   return (
-    <div className="flex overflow-x-auto gap-2 py-2 no-scrollbar px-4">
+    <div className="flex overflow-x-auto gap-2 py-2 no-scrollbar px-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
       {CATEGORIES.map(cat => (
         <button
           key={cat}

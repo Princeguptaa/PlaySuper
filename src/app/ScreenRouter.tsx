@@ -23,7 +23,12 @@ export const ScreenRouter: React.FC = () => {
     case 'reward_detail':
       return variant === 'classic' ? <ClassicRewardDetail /> : <RewardDetail />;
     case 'redeem_sheet':
-      return <RedeemSheet />;
+      return (
+        <div className="relative h-full w-full overflow-hidden">
+          {variant === 'classic' ? <ClassicRewardDetail /> : <RewardDetail />}
+          <RedeemSheet />
+        </div>
+      );
     case 'receipt':
       return variant === 'classic' ? <ClassicConfirmation /> : <Receipt />;
     default:

@@ -8,7 +8,16 @@ import { enrichAndLogEvent } from '../lib/analytics';
 const createInitialState = () => ({
   balance: INITIAL_BALANCE,
   goalId: null,
-  ledger: [],
+  ledger: [
+    {
+      id: 'seed-0',
+      type: 'earn' as const,
+      amount: INITIAL_BALANCE,
+      ts: Date.now(),
+      refId: 'starting_balance',
+      reason: 'starting_balance',
+    },
+  ],
   orders: [],
   session: {
     id: generateId(),
@@ -125,6 +134,26 @@ export const useAppStore = create<AppState>()(
         // Don't persist events
         const { events, ...rest } = state;
         return rest;
+      },
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          const hasStarting = state.ledger?.some(
+            (l) => l.refId === 'starting_balance' || l.reason === 'starting_balance'
+          );
+          if (!hasStarting) {
+            state.ledger = [
+              {
+                id: 'seed-0',
+                type: 'earn' as const,
+                amount: INITIAL_BALANCE,
+                ts: Date.now(),
+                refId: 'starting_balance',
+                reason: 'starting_balance',
+              },
+              ...(state.ledger || []),
+            ];
+          }
+        }
       },
     }
   )

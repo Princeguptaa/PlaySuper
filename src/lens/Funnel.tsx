@@ -14,9 +14,9 @@ export const Funnel: React.FC = () => {
       <h3 className="font-bold mb-4">Funnel (This Session)</h3>
       <div className="h-48">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} layout="vertical" margin={{ top: 0, right: 30, left: 20, bottom: 0 }}>
+          <BarChart data={data} layout="vertical" margin={{ top: 0, right: 25, left: 10, bottom: 0 }}>
             <XAxis type="number" hide />
-            <YAxis dataKey="name" type="category" width={120} tick={{ fontSize: 10, fill: 'var(--muted)' }} axisLine={false} tickLine={false} />
+            <YAxis dataKey="name" type="category" width={145} tick={{ fontSize: 9, fill: '#a1a1aa' }} axisLine={false} tickLine={false} />
             <Tooltip 
               cursor={{ fill: 'var(--surface)' }}
               content={({ active, payload }) => {
@@ -25,7 +25,7 @@ export const Funnel: React.FC = () => {
                   return (
                     <div className="bg-[#111] border border-surface p-2 rounded text-xs">
                       <div className="font-bold text-white">{d.name}</div>
-                      <div className="text-muted">Count: {d.count}</div>
+                      <div className="text-[#a1a1aa]">Count: {d.count}</div>
                       <div className="text-success">Conv: {d.conversion}%</div>
                     </div>
                   );

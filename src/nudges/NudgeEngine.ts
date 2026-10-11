@@ -1,5 +1,6 @@
 import { AppState, Reward } from '../state/types';
 import { SEED_CATALOGUE } from '../lib/seed';
+import { avgCoinsPerRound, effortETA } from '../lib/economy';
 
 export type NudgeType = 'N1_NEAR_GOAL' | 'N2_UNLOCK' | 'N3_FIRST_GOAL';
 
@@ -18,9 +19,17 @@ export function evaluateNudge(state: AppState): NudgeResult | null {
   if (state.session.nudgesShown >= 3) return null;
 
   const { balance, goalId, session } = state;
-  const avgPerRound = session.coinsHistory.length > 0 
-    ? session.coinsHistory.reduce((a, b) => a + b, 0) / session.coinsHistory.length 
-    : 70; // fallback default
+  const avgPerRound = avgCoinsPerRound(session.coinsHistory);
+
+  // N3 First goal - after round 1, if no goal is pinned, show the "Pick your first goal" nudge
+  if (!goalId && session.roundsPlayed >= 1) {
+    const suggestion = SEED_CATALOGUE.find(r => r.tag === 'quick_win') || SEED_CATALOGUE[0];
+    return {
+      type: 'N3_FIRST_GOAL',
+      reward: suggestion,
+      message: "Pick your first goal"
+    };
+  }
   
   // Calculate coins earned this round (it's the last entry in coinsHistory)
   const earnedThisRound = session.coinsHistory.length > 0 ? session.coinsHistory[session.coinsHistory.length - 1] : 0;
@@ -58,26 +67,16 @@ export function evaluateNudge(state: AppState): NudgeResult | null {
   if (goalId) {
     const goalReward = SEED_CATALOGUE.find(r => r.id === goalId);
     if (goalReward) {
-      const remaining = goalReward.priceCoins - balance;
+      const remaining = Math.max(0, goalReward.priceCoins - balance);
       if (remaining > 0 && remaining <= avgPerRound * 2) {
+        const eta = effortETA(goalReward.priceCoins, balance, avgPerRound);
         return {
           type: 'N1_NEAR_GOAL',
           reward: goalReward,
-          message: `You're ${remaining} coins from ${goalReward.brand} ${goalReward.title}. One more round?`
+          message: `You're ${remaining} coins from ${goalReward.brand} ${goalReward.title} (${eta}). One more round?`
         };
       }
     }
-  }
-
-  // N3 First goal - round 1 with no goal
-  if (!goalId && session.roundsPlayed === 1) {
-    // Pick a quick win as a suggestion
-    const suggestion = SEED_CATALOGUE.find(r => r.tag === 'quick_win') || SEED_CATALOGUE[0];
-    return {
-      type: 'N3_FIRST_GOAL',
-      reward: suggestion,
-      message: "Pick your first goal"
-    };
   }
 
   return null;

@@ -13,10 +13,10 @@ export const EventRow: React.FC<{ event: AnalyticsEvent }> = ({ event }) => {
         onClick={() => setExpanded(!expanded)}
       >
         <div className="flex items-center space-x-2">
-          <span className="text-muted text-xs font-mono">{time}</span>
-          <span className="font-semibold text-text">{event.event_name}</span>
+          <span className="text-[#a1a1aa] text-xs font-mono">{time}</span>
+          <span className="font-semibold text-white">{event.event_name}</span>
         </div>
-        <span className="text-xs text-muted">{expanded ? '▼' : '▶'}</span>
+        <span className="text-xs text-[#a1a1aa]">{expanded ? '▼' : '▶'}</span>
       </div>
       
       <AnimatePresence>
@@ -27,7 +27,7 @@ export const EventRow: React.FC<{ event: AnalyticsEvent }> = ({ event }) => {
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <pre className="bg-background/50 p-2 mt-1 rounded text-xs text-muted font-mono overflow-x-auto">
+            <pre className="bg-background/50 p-2 mt-1 rounded text-xs text-[#a1a1aa] font-mono overflow-x-auto">
               {JSON.stringify(event, null, 2)}
             </pre>
           </motion.div>

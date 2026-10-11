@@ -33,7 +33,7 @@ export const LensPanel: React.FC = () => {
           <span>PM Lens</span>
         </h2>
         <button 
-          className="lg:hidden text-muted hover:text-white"
+          className="lg:hidden text-[#a1a1aa] hover:text-white"
           onClick={() => setLensOpen(false)}
         >
           ✕
@@ -44,13 +44,13 @@ export const LensPanel: React.FC = () => {
         <h3 className="font-bold mb-3">Store Variant</h3>
         <div className="flex bg-background border border-surface rounded p-1">
           <button
-            className={`flex-1 py-1 text-sm rounded transition-colors ${variant === 'goal' ? 'bg-primary text-background font-bold' : 'text-muted'}`}
+            className={`flex-1 py-1 text-sm rounded transition-colors ${variant === 'goal' ? 'bg-primary text-background font-bold' : 'text-[#a1a1aa] hover:text-white'}`}
             onClick={() => switchVariant('goal')}
           >
             Goal Store
           </button>
           <button
-            className={`flex-1 py-1 text-sm rounded transition-colors ${variant === 'classic' ? 'bg-primary text-background font-bold' : 'text-muted'}`}
+            className={`flex-1 py-1 text-sm rounded transition-colors ${variant === 'classic' ? 'bg-primary text-background font-bold' : 'text-[#a1a1aa] hover:text-white'}`}
             onClick={() => switchVariant('classic')}
           >
             Classic
@@ -109,9 +109,9 @@ export const LensPanel: React.FC = () => {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="lg:hidden fixed bottom-0 left-0 right-0 h-[85vh] sm:h-full sm:top-0 sm:left-auto sm:w-96 bg-[#0a0a0a] z-50 rounded-t-2xl sm:rounded-none border-t sm:border-t-0 sm:border-l border-surface shadow-2xl"
+              className="lg:hidden fixed bottom-0 left-0 right-0 h-[85vh] bg-[#0a0a0a] z-50 rounded-t-3xl border-t border-surface shadow-2xl flex flex-col overflow-hidden"
             >
-              <div className="w-12 h-1.5 bg-surface rounded-full mx-auto my-3 sm:hidden" />
+              <div className="w-12 h-1.5 bg-surface rounded-full mx-auto my-3 shrink-0" />
               {PanelContent}
             </motion.div>
           </>

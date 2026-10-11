@@ -18,18 +18,22 @@ export const SkinSwitcher: React.FC = () => {
   return (
     <div className="bg-surface/10 border border-surface rounded-xl p-4 my-4">
       <h3 className="font-bold mb-3">Theme Skin</h3>
-      <div className="flex space-x-2">
-        {(['neon', 'jungle', 'retail'] as const).map(s => (
+      <div className="flex gap-1.5">
+        {[
+          { id: 'neon', label: 'Neon Arcade' },
+          { id: 'jungle', label: 'Jungle Pop' },
+          { id: 'retail', label: 'Retail Light' },
+        ].map(({ id, label }) => (
           <button
-            key={s}
-            onClick={() => handleSwitch(s)}
-            className={`flex-1 py-1 px-2 text-xs rounded capitalize transition-colors ${
-              skin === s 
+            key={id}
+            onClick={() => handleSwitch(id as 'neon' | 'jungle' | 'retail')}
+            className={`flex-1 py-1.5 px-1 text-[11px] rounded transition-colors text-center whitespace-nowrap ${
+              skin === id 
                 ? 'bg-primary text-background font-bold' 
-                : 'bg-surface/50 text-muted hover:bg-surface'
+                : 'bg-surface/50 text-[#a1a1aa] hover:bg-surface hover:text-white font-medium'
             }`}
           >
-            {s}
+            {label}
           </button>
         ))}
       </div>

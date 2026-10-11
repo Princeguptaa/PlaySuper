@@ -21,8 +21,8 @@ export const RedeemSheet: React.FC = () => {
   };
   
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-end justify-center z-50">
-      <div className="bg-[var(--bg)] w-full max-w-[700px] rounded-t-2xl p-6 pb-10 animate-slide-up">
+    <div className="absolute inset-0 bg-black/60 flex items-end justify-center z-50">
+      <div className="bg-[var(--bg)] w-full rounded-t-2xl p-6 pb-10 animate-slide-up">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-[var(--text)] font-bold text-xl">Confirm Redeem</h2>
           <button onClick={() => navigate('reward_detail')} className="w-8 h-8 rounded-full bg-[var(--surface)] text-[var(--text)] font-bold flex items-center justify-center">✕</button>

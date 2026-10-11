@@ -6,15 +6,18 @@ export const EventStream: React.FC = () => {
   const events = useAppStore(state => state.events);
   const [filter, setFilter] = useState<string>('all');
   
-  // get unique event types
-  const types = Array.from(new Set(events.map(e => e.event_name)));
+  // Last 50 events
+  const last50Events = events.slice(0, 50);
   
-  const filteredEvents = filter === 'all' ? events : events.filter(e => e.event_name === filter);
+  // get unique event types from recent events
+  const types = Array.from(new Set(last50Events.map(e => e.event_name)));
+  
+  const filteredEvents = filter === 'all' ? last50Events : last50Events.filter(e => e.event_name === filter);
   
   return (
     <div className="flex flex-col h-64 border border-surface rounded-xl overflow-hidden bg-surface/10">
       <div className="p-2 border-b border-surface flex justify-between items-center bg-surface/30">
-        <h3 className="font-bold text-sm">Event Stream ({events.length})</h3>
+        <h3 className="font-bold text-sm">Live Event Stream ({last50Events.length})</h3>
         <select 
           value={filter} 
           onChange={e => setFilter(e.target.value)}
@@ -29,7 +32,7 @@ export const EventStream: React.FC = () => {
           <EventRow key={`${e.timestamp}-${e.event_name}-${idx}`} event={e} />
         ))}
         {filteredEvents.length === 0 && (
-          <div className="text-center text-muted text-sm py-8">No events yet</div>
+          <div className="text-center text-[#a1a1aa] text-sm py-8">No events yet</div>
         )}
       </div>
     </div>

@@ -45,7 +45,7 @@ export const Simulator: React.FC = () => {
       <div className="space-y-3">
         <div>
           <div className="flex justify-between text-xs mb-1">
-            <span className="text-muted">Avg Coins / Round</span>
+            <span className="text-[#a1a1aa]">Avg Coins / Round</span>
             <span>{coinsPerRound}</span>
           </div>
           <input 
@@ -57,7 +57,7 @@ export const Simulator: React.FC = () => {
         
         <div>
           <div className="flex justify-between text-xs mb-1">
-            <span className="text-muted">Price Multiplier</span>
+            <span className="text-[#a1a1aa]">Price Multiplier</span>
             <span>{priceMultiplier.toFixed(1)}x</span>
           </div>
           <input 
@@ -69,7 +69,7 @@ export const Simulator: React.FC = () => {
         
         <div>
           <div className="flex justify-between text-xs mb-1">
-            <span className="text-muted">Rounds / Day</span>
+            <span className="text-[#a1a1aa]">Rounds / Day</span>
             <span>{roundsPerDay}</span>
           </div>
           <input 
@@ -81,21 +81,21 @@ export const Simulator: React.FC = () => {
       </div>
       
       <div className="bg-background/50 rounded p-3 text-sm grid grid-cols-2 gap-y-2">
-        <div className="text-muted">Daily Earn:</div>
+        <div className="text-[#a1a1aa]">Daily Earn:</div>
         <div className="text-right font-mono">{dailyEarn}</div>
         
-        <div className="text-muted">First Reward in:</div>
+        <div className="text-[#a1a1aa]">First Reward in:</div>
         <div className="text-right font-mono">{daysToFirst} days ({roundsToFirst} rnds)</div>
         
-        <div className="text-muted">Everyday (Zomato) in:</div>
+        <div className="text-[#a1a1aa]">Everyday (Zomato) in:</div>
         <div className="text-right font-mono">{daysToEveryday} days</div>
       </div>
       
       <button 
         onClick={handleSimulateRound}
-        className="w-full bg-surface hover:bg-surface/80 text-white rounded py-2 text-sm transition-colors"
+        className="w-full bg-surface hover:bg-surface/80 text-white rounded py-2 text-sm font-medium transition-colors"
       >
-        Simulate 1 Round (+{coinsPerRound})
+        Simulate round (+{coinsPerRound})
       </button>
     </div>
   );

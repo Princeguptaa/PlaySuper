@@ -55,8 +55,8 @@ export const Receipt: React.FC = () => {
   };
   
   return (
-    <div className="flex flex-col h-full bg-[var(--bg)] overflow-y-auto">
-      <div className="p-6 pb-24">
+    <div className="relative flex flex-col h-full bg-[var(--bg)] overflow-hidden">
+      <div className="flex-1 overflow-y-auto p-6 pb-24">
         <motion.div 
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -93,6 +93,41 @@ export const Receipt: React.FC = () => {
                 </div>
               )}
             </div>
+
+            {/* Collapsible How to use and Terms */}
+            <div className="mt-4 space-y-2 text-left text-xs border-t border-[var(--muted)]/20 pt-3">
+              {reward.howToUse && reward.howToUse.length > 0 && (
+                <details className="group rounded-lg bg-[var(--bg)]/50 border border-[var(--muted)]/20 overflow-hidden">
+                  <summary className="cursor-pointer p-2.5 font-bold text-[var(--text)] flex justify-between items-center select-none hover:text-[var(--primary)] transition-colors">
+                    <span>How to use</span>
+                    <span className="text-[var(--muted)] text-[10px] group-open:rotate-180 transition-transform">▼</span>
+                  </summary>
+                  <div className="px-3 pb-3 pt-1 text-[var(--muted)]">
+                    <ul className="list-disc pl-4 space-y-1">
+                      {reward.howToUse.map((step, idx) => (
+                        <li key={idx}>{step}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </details>
+              )}
+
+              {reward.terms && reward.terms.length > 0 && (
+                <details className="group rounded-lg bg-[var(--bg)]/50 border border-[var(--muted)]/20 overflow-hidden">
+                  <summary className="cursor-pointer p-2.5 font-bold text-[var(--text)] flex justify-between items-center select-none hover:text-[var(--primary)] transition-colors">
+                    <span>Terms</span>
+                    <span className="text-[var(--muted)] text-[10px] group-open:rotate-180 transition-transform">▼</span>
+                  </summary>
+                  <div className="px-3 pb-3 pt-1 text-[var(--muted)]">
+                    <ul className="list-disc pl-4 space-y-1">
+                      {reward.terms.map((term, idx) => (
+                        <li key={idx}>{term}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </details>
+              )}
+            </div>
             
             <p className="text-[var(--muted)] text-xs mt-4">Expires in {reward.validityDays} days</p>
           </div>
@@ -110,8 +145,8 @@ export const Receipt: React.FC = () => {
         )}
       </div>
       
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-[var(--bg)] border-t border-[var(--muted)]/20">
-        <div className="max-w-[700px] mx-auto">
+      <div className="absolute bottom-0 left-0 right-0 p-4 bg-[var(--bg)] border-t border-[var(--muted)]/20 z-10">
+        <div className="w-full mx-auto">
           <Button className="w-full" onClick={handleBackToGame}>Back to game</Button>
         </div>
       </div>

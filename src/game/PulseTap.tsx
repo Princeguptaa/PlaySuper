@@ -36,7 +36,7 @@ export const PulseTap: React.FC<{ onRoundEnd: (hits: number, combo: number, coin
     let active = true;
 
     const scheduleNext = () => {
-      const nextDelay = 450 + Math.random() * 350;
+      const nextDelay = 400 + Math.random() * 300;
       timerId = setTimeout(() => {
         if (!active) return;
         const id = `orb-${orbIdCounter.current++}`;
@@ -54,7 +54,7 @@ export const PulseTap: React.FC<{ onRoundEnd: (hits: number, combo: number, coin
       const y = Math.random() * (PLAY_AREA_H - ORB_RADIUS * 2);
       setOrbs(prev => [...prev, { id, x, y }]);
       scheduleNext();
-    }, 500);
+    }, 400);
 
     return () => {
       active = false;
@@ -110,7 +110,7 @@ export const PulseTap: React.FC<{ onRoundEnd: (hits: number, combo: number, coin
             radius={ORB_RADIUS}
             onTap={handleOrbTap}
             onExpire={handleOrbExpire}
-            lifetime={1100}
+            lifetime={1400}
             reducedMotion={reducedMotion}
           />
         ))}

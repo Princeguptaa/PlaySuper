@@ -7,10 +7,9 @@ import { RewardCard } from '../components/RewardCard';
 import { CategoryChips } from '../components/CategoryChips';
 import { RewardCategory } from '../state/types';
 import { WalletPill } from '../components/WalletPill';
-import { VariantToggle } from './VariantToggle';
 
 export const StoreHome: React.FC = () => {
-  const { balance, goalId, navigate, logEvent, orders, ui } = useAppStore();
+  const { balance, goalId, navigate, logEvent, ui } = useAppStore();
   const [selectedCategory, setSelectedCategory] = useState<RewardCategory | 'All'>('All');
   const [openTime] = useState(Date.now());
 
@@ -61,29 +60,48 @@ export const StoreHome: React.FC = () => {
     navigate('reward_detail');
   };
 
-  const withinReachRewards = rankWithinReach(
+  const session = useAppStore((s) => s.session);
+
+  // Track rewards shown in rails above All Rewards grid to prevent duplicates across rails
+  const shownIds = new Set<string>();
+  if (goalReward) {
+    shownIds.add(goalReward.id);
+  }
+
+  // Quick wins: exclude goal, redeemed rewards in this session, and anything already shown
+  const quickWinRewards = SEED_CATALOGUE.filter(
+    (r) => r.tag === 'quick_win' && !shownIds.has(r.id) && !session.redemptionsThisSession.includes(r.id)
+  );
+  quickWinRewards.forEach((r) => shownIds.add(r.id));
+
+  // Within reach: exclude goal, quick wins, redeemed rewards in this session, and anything already shown
+  const allWithinReach = rankWithinReach(
     SEED_CATALOGUE,
     balance,
     goalReward ? goalReward.category : null,
     []
   );
-
-  const quickWinRewards = SEED_CATALOGUE.filter((r) => r.tag === 'quick_win');
+  const withinReachRewards = allWithinReach.filter(
+    (r) => !shownIds.has(r.id) && !session.redemptionsThisSession.includes(r.id)
+  );
+  withinReachRewards.forEach((r) => shownIds.add(r.id));
 
   const filteredGrid = selectedCategory === 'All'
     ? SEED_CATALOGUE
     : SEED_CATALOGUE.filter((r) => r.category === selectedCategory);
 
-  const hasRedemptions = orders.length > 0;
-
   const renderRail = (title: string, rewards: typeof SEED_CATALOGUE) => {
     if (rewards.length === 0) return null;
+    const railId = title === 'Quick Wins' ? 'rail-quick-wins' : undefined;
     return (
-      <div className="mb-6">
+      <div id={railId} className="mb-6 scroll-mt-4">
         <h3 className="text-[var(--text)] font-bold mb-3 px-4">{title}</h3>
-        <div className="flex overflow-x-auto gap-3 px-4 pb-2 no-scrollbar">
+        <div 
+          className="flex items-stretch overflow-x-auto gap-3 px-4 pb-2 no-scrollbar"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
           {rewards.map((reward) => (
-            <div key={reward.id} className="w-[140px] shrink-0">
+            <div key={reward.id} className="w-[140px] shrink-0 flex flex-col">
               <RewardCard reward={reward} onClick={handleRewardClick} />
             </div>
           ))}
@@ -93,7 +111,7 @@ export const StoreHome: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[var(--bg)] overflow-hidden">
+    <div className="relative flex flex-col h-full bg-[var(--bg)] overflow-hidden">
       <header className="flex justify-between items-center p-4 border-b border-[var(--muted)]/20">
         <WalletPill />
         <button
@@ -105,24 +123,14 @@ export const StoreHome: React.FC = () => {
       </header>
 
       <main className="flex-1 overflow-y-auto pb-10">
-        <VariantToggle />
         <div className="p-4">
           <GoalCard reward={goalReward} onSelect={handleGoalSelect} />
         </div>
 
         {selectedCategory === 'All' && (
           <>
-            {hasRedemptions ? (
-              <>
-                {renderRail('Within Reach', withinReachRewards)}
-                {renderRail('Quick Wins', quickWinRewards)}
-              </>
-            ) : (
-              <>
-                {renderRail('Quick Wins', quickWinRewards)}
-                {renderRail('Within Reach', withinReachRewards)}
-              </>
-            )}
+            {renderRail('Quick Wins', quickWinRewards)}
+            {renderRail('Within Reach', withinReachRewards)}
           </>
         )}
 
@@ -132,7 +140,7 @@ export const StoreHome: React.FC = () => {
 
         <div className="px-4">
           <h3 className="text-[var(--text)] font-bold mb-3">All Rewards</h3>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 items-stretch">
             {filteredGrid.map((reward) => (
               <RewardCard key={reward.id} reward={reward} onClick={handleRewardClick} />
             ))}

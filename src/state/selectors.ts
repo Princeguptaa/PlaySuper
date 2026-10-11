@@ -34,5 +34,5 @@ export const useTotalSpent = (state: AppState) => {
 export const useSinkRatio = (state: AppState) => {
   const earned = useTotalEarned(state);
   const spent = useTotalSpent(state);
-  return earned > 0 ? spent / earned : 0;
+  return earned > 0 ? Math.min(1, Math.max(0, spent / earned)) : 0;
 };

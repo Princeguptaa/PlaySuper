@@ -30,6 +30,7 @@ export const RewardDetail: React.FC = () => {
     );
   }
 
+  const isRedeemed = useAppStore((s) => s.session.redemptionsThisSession.includes(reward.id));
   const isAffordable = balance >= reward.priceCoins;
   const isPinned = goalId === reward.id;
 
@@ -55,7 +56,7 @@ export const RewardDetail: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[var(--bg)] overflow-hidden">
+    <div className="relative flex flex-col h-full bg-[var(--bg)] overflow-hidden">
       <header className="flex justify-between items-center p-4">
         <button
           onClick={() => navigate('store_home')}
@@ -78,6 +79,11 @@ export const RewardDetail: React.FC = () => {
           <p className="text-[var(--muted)] text-sm">{reward.brand}</p>
           <h2 className="text-[var(--text)] font-bold text-2xl">{reward.title}</h2>
           <p className="text-[var(--success)] font-medium mt-1">Value: ₹{reward.valueInr}</p>
+          {isRedeemed && (
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-zinc-600 text-zinc-200 mt-2">
+              Redeemed
+            </span>
+          )}
         </div>
 
         <div className="bg-[var(--surface)] rounded-xl p-4 mb-4 border border-[var(--muted)]/20">
@@ -125,9 +131,13 @@ export const RewardDetail: React.FC = () => {
         </div>
       </main>
 
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-[var(--bg)] border-t border-[var(--muted)]/20">
-        <div className="max-w-[700px] mx-auto">
-          {isAffordable ? (
+      <div className="absolute bottom-0 left-0 right-0 p-4 bg-[var(--bg)] border-t border-[var(--muted)]/20 z-10">
+        <div className="w-full mx-auto">
+          {isRedeemed ? (
+            <Button variant="secondary" className="w-full opacity-50 cursor-not-allowed" disabled>
+              Redeemed
+            </Button>
+          ) : isAffordable ? (
             <Button variant="primary" className="w-full" onClick={handleRedeem}>
               Redeem
             </Button>

@@ -8,10 +8,10 @@ import { GuidedTour } from './GuidedTour';
 
 export const DesktopLayout: React.FC = () => {
   return (
-    <div className="min-h-screen bg-[#050505] text-white flex justify-center items-center p-0 md:p-8">
-      <div className="w-full max-w-[1440px] h-full md:h-[844px] flex">
+    <div className="desktop-layout-wrapper min-h-screen bg-[#050505] text-white flex justify-center items-center p-0 min-[700px]:p-8">
+      <div className="w-full max-w-[1440px] h-full min-[700px]:h-[844px] flex">
         <BriefPanel />
-        <div className="flex-1 flex justify-center items-center w-full">
+        <div className="flex-1 flex justify-center items-center w-full h-full">
           <PhoneFrame>
             <ScreenRouter />
           </PhoneFrame>

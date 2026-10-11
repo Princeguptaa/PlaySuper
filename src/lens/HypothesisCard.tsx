@@ -8,25 +8,26 @@ export const HypothesisCard: React.FC = () => {
         <span>Goal Store Hypothesis</span>
       </h3>
       
-      <div className="text-sm space-y-2">
-        <p className="text-text">
-          <strong className="text-muted block text-xs">Primary Hypothesis</strong>
-          Giving players an explicit goal and translating prices into effort ("3 rounds") will increase D7 retention compared to a standard store.
-        </p>
-        
-        <div className="bg-background/50 p-2 rounded text-xs space-y-1">
-          <strong className="text-muted block">Guardrails</strong>
-          <ul className="list-disc pl-4 space-y-1 text-muted">
-            <li>Gameplay minutes per session</li>
-            <li>D1 retention</li>
-            <li>Sink ratio (40-70%)</li>
-            <li>Redeem failure rate</li>
-            <li>Nudge dismissal rate (&lt; 20%)</li>
-          </ul>
+      <div className="text-sm space-y-3">
+        <div>
+          <strong className="text-[#a1a1aa] block text-xs uppercase tracking-wider mb-1">Hypothesis</strong>
+          <p className="text-white text-xs leading-relaxed">
+            A pinned goal, effort-based pricing, capped nudges and a next-goal loop will raise D7 retention versus a classic store, without reducing gameplay time.
+          </p>
         </div>
         
-        <div className="text-xs text-muted">
-          Sample size: 50,000 per variant for 5% MDE over 14 days.
+        <div className="bg-background/50 p-3 rounded-lg text-xs space-y-1">
+          <strong className="text-[#a1a1aa] block uppercase tracking-wider mb-1">Guardrails</strong>
+          <p className="text-[#e4e4e7] leading-relaxed">
+            Gameplay minutes per DAU (no more than 3% decline); D1 retention (no decline); sink ratio 40-70%; redeem failure rate under 1%; nudge dismissal rate under 70%.
+          </p>
+        </div>
+        
+        <div>
+          <strong className="text-[#a1a1aa] block text-xs uppercase tracking-wider mb-1">Sample size</strong>
+          <p className="text-xs text-[#a1a1aa] leading-relaxed">
+            ~7,500 players per arm detects +1 pp D7 lift at a 5% baseline (80% power, 5% significance).
+          </p>
         </div>
       </div>
     </div>

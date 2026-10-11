@@ -23,6 +23,7 @@ export interface LedgerEntry {
   amount: number;
   ts: number;
   refId?: string;
+  reason?: string;
 }
 
 export interface Order {

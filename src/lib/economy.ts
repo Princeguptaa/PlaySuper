@@ -1,6 +1,6 @@
 export function calculateCoins(hits: number, longestCombo: number): number {
   const coins = hits * 4 + longestCombo * 2;
-  return Math.min(120, coins); // Cap at 120
+  return Math.min(120, Math.max(50, coins));
 }
 
 export function avgCoinsPerRound(history: number[]): number {
@@ -10,18 +10,18 @@ export function avgCoinsPerRound(history: number[]): number {
 }
 
 export function effortETA(price: number, balance: number, avgPerRound: number): string {
-  if (balance >= price) return 'Ready to claim';
-  const remaining = price - balance;
-  const rounds = Math.ceil(remaining / avgPerRound);
+  const remaining = Math.max(0, price - balance);
+  if (remaining === 0) return 'Ready to claim';
+  const roundsNeeded = Math.ceil(remaining / avgPerRound);
   
-  if (rounds <= 1) return 'about 1 round';
-  if (rounds <= 10) return `about ${rounds} rounds`;
-  
-  const mins = Math.ceil((rounds * 20) / 60); // 20s per round
-  if (mins < 60) return `about ${rounds} rounds (~${mins} min)`;
-  
-  const days = Math.ceil(rounds / 15); // Assume 15 rounds/day
-  return `about ${days} day${days > 1 ? 's' : ''} at your pace`;
+  if (roundsNeeded <= 3) {
+    return `about ${roundsNeeded} round${roundsNeeded === 1 ? '' : 's'}`;
+  }
+  if (roundsNeeded <= 20) {
+    return `about ${roundsNeeded} rounds (~${roundsNeeded * 0.5} min)`;
+  }
+  const days = Math.ceil(roundsNeeded / 15);
+  return `about ${days} day${days === 1 ? '' : 's'} at your pace`;
 }
 
 export function rewardState(price: number, balance: number): 'affordable' | 'within_reach' | 'far' {
@@ -62,7 +62,8 @@ export function nextGoalSuggestions(
   redeemedReward: Reward,
   redeemedIds: string[]
 ): Reward[] {
-  const available = rewards.filter(r => !redeemedIds.includes(r.id));
+  const excludeSet = new Set([...redeemedIds, redeemedReward.id]);
+  const available = rewards.filter(r => !excludeSet.has(r.id));
   const suggestions: Reward[] = [];
 
   const sameCategoryUp = available

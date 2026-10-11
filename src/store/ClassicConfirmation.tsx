@@ -28,7 +28,7 @@ export const ClassicConfirmation: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[var(--bg)] text-[var(--text)]">
+    <div className="relative flex flex-col h-full bg-[var(--bg)] overflow-hidden text-[var(--text)]">
       <header className="p-4 flex justify-between items-center border-b border-[var(--muted)]/20">
         <h2 className="font-bold">Confirmation</h2>
         <button
@@ -60,8 +60,8 @@ export const ClassicConfirmation: React.FC = () => {
         </div>
       </main>
 
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-[var(--bg)] border-t border-[var(--muted)]/20">
-        <div className="max-w-[700px] mx-auto">
+      <div className="absolute bottom-0 left-0 right-0 p-4 bg-[var(--bg)] border-t border-[var(--muted)]/20 z-10">
+        <div className="w-full mx-auto">
           <Button variant="primary" className="w-full" onClick={() => navigate('game')}>
             Close
           </Button>

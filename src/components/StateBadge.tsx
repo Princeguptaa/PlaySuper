@@ -20,7 +20,7 @@ export const StateBadge: React.FC<StateBadgeProps> = ({ state }) => {
   return (
     <span
       style={{ backgroundColor: bgColor, color: textColor }}
-      className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider"
+      className="px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider inline-block text-center whitespace-nowrap"
     >
       {text}
     </span>

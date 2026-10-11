@@ -38,12 +38,12 @@ export function computeFunnel(events: AnalyticsEvent[], sessionId: string) {
   const returned = sessionEvents.filter(e => e.event_name === 'store_closed').length;
 
   const steps = [
-    { name: 'Store Opened', count: storeOpened },
-    { name: 'Reward Viewed', count: pdpViewed },
-    { name: 'Intent (Pin/Redeem)', count: intent },
+    { name: 'Store open', count: storeOpened },
+    { name: 'Reward viewed', count: pdpViewed },
+    { name: 'Goal pinned or Redeem started', count: intent },
     { name: 'Redeemed', count: redeemed },
-    { name: 'Code Revealed', count: revealed },
-    { name: 'Returned to Game', count: returned },
+    { name: 'Receipt revealed', count: revealed },
+    { name: 'Returned to game', count: returned },
   ];
 
   return steps.map((step, i) => {

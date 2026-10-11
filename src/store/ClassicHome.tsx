@@ -6,7 +6,6 @@ import { CategoryChips } from '../components/CategoryChips';
 import { RewardCategory } from '../state/types';
 import { WalletPill } from '../components/WalletPill';
 import { BannerCarousel } from './BannerCarousel';
-import { VariantToggle } from './VariantToggle';
 
 export const ClassicHome: React.FC = () => {
   const { navigate, logEvent, ui } = useAppStore();
@@ -56,7 +55,7 @@ export const ClassicHome: React.FC = () => {
     : SEED_CATALOGUE.filter((r) => r.category === selectedCategory);
 
   return (
-    <div className="flex flex-col h-full bg-[var(--bg)] overflow-hidden">
+    <div className="relative flex flex-col h-full bg-[var(--bg)] overflow-hidden">
       <header className="flex justify-between items-center p-4 border-b border-[var(--muted)]/20">
         <WalletPill />
         <button
@@ -68,7 +67,6 @@ export const ClassicHome: React.FC = () => {
       </header>
 
       <main className="flex-1 overflow-y-auto pb-10">
-        <VariantToggle />
         <BannerCarousel />
 
         <div className="sticky top-0 bg-[var(--bg)]/90 backdrop-blur z-10 border-b border-[var(--muted)]/20 pb-2 mb-4">
@@ -77,7 +75,7 @@ export const ClassicHome: React.FC = () => {
 
         <div className="px-4">
           <h3 className="text-[var(--text)] font-bold mb-3">All Rewards</h3>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 items-stretch">
             {filteredGrid.map((reward) => (
               <RewardCard key={reward.id} reward={reward} onClick={handleRewardClick} />
             ))}
