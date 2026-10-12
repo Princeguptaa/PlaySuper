@@ -8,14 +8,18 @@ import { CategoryChips } from '../components/CategoryChips';
 import { RewardCategory } from '../state/types';
 import { WalletPill } from '../components/WalletPill';
 
+import { generateId } from '../lib/utils';
+
 export const StoreHome: React.FC = () => {
   const { balance, goalId, navigate, logEvent, ui } = useAppStore();
   const [selectedCategory, setSelectedCategory] = useState<RewardCategory | 'All'>('All');
   const [openTime] = useState(Date.now());
 
   useEffect(() => {
+    const visitId = generateId();
     logEvent({
       event_name: 'store_opened',
+      visit_id: visitId,
       entry_point: ui.screen,
       has_goal: !!goalId,
       source: 'user',
@@ -112,11 +116,11 @@ export const StoreHome: React.FC = () => {
 
   return (
     <div className="relative flex flex-col h-full bg-[var(--bg)] overflow-hidden">
-      <header className="flex justify-between items-center p-4 border-b border-[var(--muted)]/20">
+      <header className="flex justify-between items-center p-4 border-b border-[var(--border)]">
         <WalletPill />
         <button
           onClick={handleClose}
-          className="w-8 h-8 rounded-full bg-[var(--surface)] border border-[var(--muted)]/30 flex items-center justify-center text-[var(--text)]"
+          className="w-8 h-8 rounded-full bg-[var(--surface)] border border-[var(--border)] flex items-center justify-center text-[var(--text)]"
         >
           ✕
         </button>
@@ -134,7 +138,7 @@ export const StoreHome: React.FC = () => {
           </>
         )}
 
-        <div className="sticky top-0 bg-[var(--bg)]/90 backdrop-blur z-10 border-b border-[var(--muted)]/20 pb-2 mb-4">
+        <div className="sticky top-0 bg-[var(--bg)]/90 backdrop-blur z-10 border-b border-[var(--border)] pb-2 mb-4">
           <CategoryChips selectedCategory={selectedCategory} onSelect={setSelectedCategory} />
         </div>
 

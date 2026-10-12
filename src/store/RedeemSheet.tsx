@@ -49,7 +49,7 @@ export const RedeemSheet: React.FC = () => {
             <span className="text-[var(--muted)]">Reward Price</span>
             <span className="font-bold text-red-400">- 🪙 {reward.priceCoins}</span>
           </div>
-          <div className="h-px bg-[var(--muted)]/20 my-2" />
+          <div className="h-px bg-[var(--border)] my-2" />
           <div className="flex justify-between">
             <span className="text-[var(--muted)] font-bold">Balance After</span>
             <span className="font-bold text-[var(--success)]">🪙 {balanceAfter}</span>

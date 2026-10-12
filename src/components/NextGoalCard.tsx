@@ -27,7 +27,7 @@ export const NextGoalCard: React.FC<NextGoalCardProps> = ({ reward, rank }) => {
 
   return (
     <div 
-      className="bg-[var(--surface)] p-3 rounded-xl shadow-sm border border-[var(--muted)]/20 flex gap-3 items-center cursor-pointer active:scale-95 transition-transform"
+      className="bg-[var(--surface)] p-3 rounded-xl shadow-sm border border-[var(--border)] flex gap-3 items-center cursor-pointer active:scale-95 transition-transform"
       onClick={handlePin}
     >
       <div 

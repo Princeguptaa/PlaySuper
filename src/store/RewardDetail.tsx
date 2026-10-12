@@ -86,7 +86,7 @@ export const RewardDetail: React.FC = () => {
           )}
         </div>
 
-        <div className="bg-[var(--surface)] rounded-xl p-4 mb-4 border border-[var(--muted)]/20">
+        <div className="bg-[var(--surface)] rounded-xl p-4 mb-4 border border-[var(--border)]">
           <div className="flex justify-between items-center mb-2">
             <span className="text-[var(--text)] font-bold">Price</span>
             <span className="text-[var(--accent-coin)] font-bold text-lg">🪙 {reward.priceCoins}</span>
@@ -131,7 +131,7 @@ export const RewardDetail: React.FC = () => {
         </div>
       </main>
 
-      <div className="absolute bottom-0 left-0 right-0 p-4 bg-[var(--bg)] border-t border-[var(--muted)]/20 z-10">
+      <div className="absolute bottom-0 left-0 right-0 p-4 bg-[var(--bg)] border-t border-[var(--border)] z-10">
         <div className="w-full mx-auto">
           {isRedeemed ? (
             <Button variant="secondary" className="w-full opacity-50 cursor-not-allowed" disabled>

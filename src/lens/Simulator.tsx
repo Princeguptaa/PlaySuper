@@ -45,70 +45,70 @@ export const Simulator: React.FC = () => {
   };
 
   return (
-    <div className="bg-surface/10 border border-surface rounded-xl p-4 my-4 space-y-4">
-      <h3 className="font-bold flex justify-between items-center">
+    <div className="bg-[var(--lens-surface)] border border-[var(--lens-border)] text-[var(--lens-text)] rounded-xl p-4 my-4 space-y-4">
+      <h3 className="font-bold flex justify-between items-center text-[var(--lens-text)]">
         Economy Simulator
-        <span className="text-[10px] bg-primary/20 text-primary px-2 py-0.5 rounded">Demo economy</span>
+        <span className="text-[10px] bg-[var(--lens-primary)]/20 text-[#c4b5fd] px-2 py-0.5 rounded font-medium">Demo economy</span>
       </h3>
       
       <div className="space-y-3">
         <div>
           <div className="flex justify-between text-xs mb-1">
-            <span className="text-[#a1a1aa]">Avg Coins / Round</span>
-            <span>{coinsPerRound}</span>
+            <span className="text-[var(--lens-muted)]">Avg Coins / Round</span>
+            <span className="text-[var(--lens-text)] font-semibold">{coinsPerRound}</span>
           </div>
           <input 
             type="range" min="10" max="150" value={coinsPerRound} 
             onChange={(e) => setCoinsPerRound(Number(e.target.value))}
-            className="w-full accent-primary"
+            className="w-full accent-[var(--lens-primary)]"
           />
         </div>
         
         <div>
           <div className="flex justify-between text-xs mb-1">
-            <span className="text-[#a1a1aa]">Price Multiplier</span>
-            <span>{priceMultiplier.toFixed(1)}x</span>
+            <span className="text-[var(--lens-muted)]">Price Multiplier</span>
+            <span className="text-[var(--lens-text)] font-semibold">{priceMultiplier.toFixed(1)}x</span>
           </div>
           <input 
             type="range" min="0.5" max="3.0" step="0.1" value={priceMultiplier} 
             onChange={(e) => setPriceMultiplier(Number(e.target.value))}
-            className="w-full accent-primary"
+            className="w-full accent-[var(--lens-primary)]"
           />
         </div>
         
         <div>
           <div className="flex justify-between text-xs mb-1">
-            <span className="text-[#a1a1aa]">Rounds / Day</span>
-            <span>{roundsPerDay}</span>
+            <span className="text-[var(--lens-muted)]">Rounds / Day</span>
+            <span className="text-[var(--lens-text)] font-semibold">{roundsPerDay}</span>
           </div>
           <input 
             type="range" min="1" max="50" value={roundsPerDay} 
             onChange={(e) => setRoundsPerDay(Number(e.target.value))}
-            className="w-full accent-primary"
+            className="w-full accent-[var(--lens-primary)]"
           />
         </div>
       </div>
       
-      <div className="bg-background/50 rounded p-3 text-sm space-y-2">
+      <div className="bg-[var(--lens-bg)] border border-[var(--lens-border)] rounded p-3 text-sm space-y-2">
         <div className="flex justify-between items-center gap-2">
-          <span className="text-[#a1a1aa]">Daily earn</span>
-          <span className="text-right font-mono font-medium text-white">{dailyEarn}</span>
+          <span className="text-[var(--lens-muted)]">Daily earn</span>
+          <span className="text-right font-mono font-medium text-[var(--lens-text)]">{dailyEarn}</span>
         </div>
         
         <div className="flex justify-between items-center gap-2">
-          <span className="text-[#a1a1aa]">Time to first reward</span>
-          <span className="text-right font-mono font-medium text-white">{timeToFirstReward}</span>
+          <span className="text-[var(--lens-muted)]">Time to first reward</span>
+          <span className="text-right font-mono font-medium text-[var(--lens-text)]">{timeToFirstReward}</span>
         </div>
         
         <div className="flex justify-between items-center gap-2">
-          <span className="text-[#a1a1aa]">Days to Everyday tier (400-900 coins)</span>
-          <span className="text-right font-mono font-medium text-white">{daysToEverydayTier}</span>
+          <span className="text-[var(--lens-muted)]">Days to Everyday tier (400-900 coins)</span>
+          <span className="text-right font-mono font-medium text-[var(--lens-text)]">{daysToEverydayTier}</span>
         </div>
       </div>
       
       <button 
         onClick={handleSimulateRound}
-        className="w-full bg-surface hover:bg-surface/80 text-white rounded py-2 text-sm font-medium transition-colors"
+        className="w-full bg-[var(--lens-surface)] text-white border border-[var(--lens-border)] hover:bg-[#22253a] rounded py-2 text-sm font-bold transition-colors"
       >
         Simulate round (+{coinsPerRound})
       </button>

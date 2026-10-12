@@ -1,8 +1,12 @@
 import React from 'react';
+import { useAppStore } from '../state/useAppStore';
 
 export const PhoneFrame: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const skin = useAppStore((state) => state.ui.skin);
+
   return (
     <div 
+      data-skin={skin}
       className="phone-viewport-container relative bg-background overflow-hidden mx-auto flex flex-col"
       style={{ position: 'relative', overflow: 'hidden' }}
     >

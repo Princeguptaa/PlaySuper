@@ -38,10 +38,10 @@ export const ClassicRewardDetail: React.FC = () => {
 
   return (
     <div className="relative flex flex-col h-full bg-[var(--bg)] overflow-hidden">
-      <header className="flex justify-between items-center p-4 border-b border-[var(--muted)]/20">
+      <header className="flex justify-between items-center p-4 border-b border-[var(--border)]">
         <button
           onClick={() => navigate('store_home')}
-          className="w-8 h-8 rounded-full bg-[var(--surface)] flex items-center justify-center text-[var(--text)]"
+          className="w-8 h-8 rounded-full bg-[var(--surface)] border border-[var(--border)] flex items-center justify-center text-[var(--text)]"
         >
           ←
         </button>
@@ -67,7 +67,7 @@ export const ClassicRewardDetail: React.FC = () => {
           )}
         </div>
 
-        <div className="flex justify-between items-center bg-[var(--surface)] p-4 rounded-xl mb-6">
+        <div className="flex justify-between items-center bg-[var(--surface)] p-4 rounded-xl mb-6 border border-[var(--border)]">
           <span className="text-[var(--text)] font-bold">Price</span>
           <span className="text-[var(--accent-coin)] font-bold text-xl">🪙 {reward.priceCoins}</span>
         </div>
@@ -95,7 +95,7 @@ export const ClassicRewardDetail: React.FC = () => {
         </div>
       </main>
 
-      <div className="absolute bottom-0 left-0 right-0 p-4 bg-[var(--bg)] border-t border-[var(--muted)]/20 z-10">
+      <div className="absolute bottom-0 left-0 right-0 p-4 bg-[var(--bg)] border-t border-[var(--border)] z-10">
         <div className="w-full mx-auto">
           {isRedeemed ? (
             <Button variant="secondary" className="w-full opacity-50 cursor-not-allowed" disabled>

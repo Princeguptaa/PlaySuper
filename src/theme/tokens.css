@@ -1,3 +1,12 @@
+:root {
+  --lens-bg: #0c0d14;
+  --lens-surface: #171926;
+  --lens-text: #f4f5f8;
+  --lens-muted: #9496a8;
+  --lens-primary: #7c5cff;
+  --lens-border: rgba(255, 255, 255, 0.12);
+}
+
 :root,
 [data-skin='neon'] {
   --bg: #0B1020;
@@ -7,6 +16,7 @@
   --success: #22D3A0;
   --text: #EAF0FF;
   --muted: #8A94B8;
+  --border: rgba(234, 240, 255, 0.12);
   --radius: 20px;
   --font-display: 'Sora', sans-serif;
 }
@@ -19,6 +29,7 @@
   --success: #7BE495;
   --text: #F1FFF4;
   --muted: #9CC7AA;
+  --border: rgba(241, 255, 244, 0.12);
   --radius: 28px;
   --font-display: 'Baloo 2', sans-serif;
 }
@@ -31,6 +42,7 @@
   --success: #16A34A;
   --text: #0F172A;
   --muted: #64748B;
+  --border: rgba(15, 23, 42, 0.12);
   --radius: 8px;
   --font-display: 'Inter', sans-serif;
 }

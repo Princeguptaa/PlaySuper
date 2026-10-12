@@ -95,9 +95,31 @@ export const useAppStore = create<AppState>()(
 
       navigate: (screen) => set((state) => ({ ui: { ...state.ui, screen } })),
 
-      logEvent: (partialEvent) => set((state) => ({
-        events: enrichAndLogEvent(state, partialEvent)
-      })),
+      logEvent: (partialEvent) => set((state) => {
+        let currentVisitId = state.session.currentVisitId;
+        let tourDone = state.ui.tourDone;
+
+        if (partialEvent.event_name === 'store_opened') {
+          currentVisitId = (partialEvent as { visit_id?: string }).visit_id || generateId();
+          (partialEvent as { visit_id?: string }).visit_id = currentVisitId;
+        } else if (partialEvent.event_name === 'round_started') {
+          currentVisitId = null;
+          tourDone = true;
+        }
+
+        const events = enrichAndLogEvent(state, partialEvent);
+        return {
+          events,
+          session: {
+            ...state.session,
+            currentVisitId,
+          },
+          ui: {
+            ...state.ui,
+            tourDone,
+          },
+        };
+      }),
 
       switchVariant: (variant) => set((state) => {
         const events = enrichAndLogEvent(state, {

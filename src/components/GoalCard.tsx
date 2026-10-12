@@ -52,7 +52,7 @@ export const GoalCard: React.FC<GoalCardProps> = ({ reward, onSelect }) => {
           </div>
         </div>
       </div>
-      <div className="flex justify-between items-center mt-2 border-t border-[var(--muted)]/20 pt-3">
+      <div className="flex justify-between items-center mt-2 border-t border-[var(--border)] pt-3">
         <div className="flex flex-col">
           <span className="text-[10px] text-[var(--muted)] uppercase tracking-wider font-bold">Remaining</span>
           <span className="text-sm font-bold text-[var(--accent-coin)] flex items-center gap-1">

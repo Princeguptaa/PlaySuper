@@ -11,12 +11,13 @@ const TOUR_STEPS = [
 
 export const GuidedTour: React.FC = () => {
   const tourDone = useAppStore(state => state.ui.tourDone);
+  const roundsPlayed = useAppStore(state => state.session.roundsPlayed);
   const screen = useAppStore(state => state.ui.screen);
   
   const [step, setStep] = useState(0);
 
   useEffect(() => {
-    if (tourDone) return;
+    if (tourDone || roundsPlayed > 0) return;
     
     // Auto-advance or sync step based on screen
     if (screen === 'game' && step === 0) {
@@ -26,7 +27,7 @@ export const GuidedTour: React.FC = () => {
     } else if (screen === 'reward_detail' && step === 1) {
       setStep(2); // auto advance to effort label step
     }
-  }, [screen, step, tourDone]);
+  }, [screen, step, tourDone, roundsPlayed]);
 
   useEffect(() => {
     if (step >= TOUR_STEPS.length && !tourDone) {
@@ -34,7 +35,7 @@ export const GuidedTour: React.FC = () => {
     }
   }, [step, tourDone]);
 
-  if (tourDone || step >= TOUR_STEPS.length) return null;
+  if (tourDone || roundsPlayed > 0 || step >= TOUR_STEPS.length) return null;
 
   const currentStep = TOUR_STEPS[step];
 

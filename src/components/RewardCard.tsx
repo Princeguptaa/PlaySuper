@@ -21,7 +21,7 @@ export const RewardCard: React.FC<RewardCardProps> = ({ reward, onClick }) => {
 
   return (
     <div 
-      className="bg-[var(--surface)] p-3 rounded-xl border border-[var(--muted)]/20 shadow-sm cursor-pointer flex flex-col justify-between h-full relative overflow-visible"
+      className="bg-[var(--surface)] p-3 rounded-xl border border-[var(--border)] shadow-sm cursor-pointer flex flex-col justify-between h-full relative overflow-visible"
       onClick={() => onClick(reward.id)}
     >
       <div>

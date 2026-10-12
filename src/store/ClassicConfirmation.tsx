@@ -29,11 +29,11 @@ export const ClassicConfirmation: React.FC = () => {
 
   return (
     <div className="relative flex flex-col h-full bg-[var(--bg)] overflow-hidden text-[var(--text)]">
-      <header className="p-4 flex justify-between items-center border-b border-[var(--muted)]/20">
+      <header className="p-4 flex justify-between items-center border-b border-[var(--border)]">
         <h2 className="font-bold">Confirmation</h2>
         <button
           onClick={() => navigate('store_home')}
-          className="w-8 h-8 rounded-full bg-[var(--surface)] flex items-center justify-center"
+          className="w-8 h-8 rounded-full bg-[var(--surface)] border border-[var(--border)] flex items-center justify-center"
         >
           ✕
         </button>
@@ -49,7 +49,7 @@ export const ClassicConfirmation: React.FC = () => {
           You have redeemed {reward.title} from {reward.brand}.
         </p>
 
-        <div className="w-full bg-[var(--surface)] rounded-xl p-6 flex flex-col items-center border border-[var(--muted)]/20">
+        <div className="w-full bg-[var(--surface)] rounded-xl p-6 flex flex-col items-center border border-[var(--border)]">
           <p className="text-sm text-[var(--muted)] mb-2">Your Coupon Code</p>
           <div className="text-2xl font-mono font-bold tracking-wider mb-4">
             {lastOrder.code}
@@ -60,7 +60,7 @@ export const ClassicConfirmation: React.FC = () => {
         </div>
       </main>
 
-      <div className="absolute bottom-0 left-0 right-0 p-4 bg-[var(--bg)] border-t border-[var(--muted)]/20 z-10">
+      <div className="absolute bottom-0 left-0 right-0 p-4 bg-[var(--bg)] border-t border-[var(--border)] z-10">
         <div className="w-full mx-auto">
           <Button variant="primary" className="w-full" onClick={() => navigate('game')}>
             Close

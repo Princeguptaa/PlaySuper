@@ -14,6 +14,7 @@ export default {
         success: 'var(--success)',
         text: 'var(--text)',
         muted: 'var(--muted)',
+        border: 'var(--border)',
       },
       borderRadius: {
         DEFAULT: 'var(--radius)',

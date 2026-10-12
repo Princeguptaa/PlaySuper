@@ -7,14 +7,18 @@ import { RewardCategory } from '../state/types';
 import { WalletPill } from '../components/WalletPill';
 import { BannerCarousel } from './BannerCarousel';
 
+import { generateId } from '../lib/utils';
+
 export const ClassicHome: React.FC = () => {
   const { navigate, logEvent, ui } = useAppStore();
   const [selectedCategory, setSelectedCategory] = useState<RewardCategory | 'All'>('All');
   const [openTime] = useState(Date.now());
 
   useEffect(() => {
+    const visitId = generateId();
     logEvent({
       event_name: 'store_opened',
+      visit_id: visitId,
       entry_point: ui.screen,
       has_goal: false,
       source: 'user',
@@ -56,11 +60,11 @@ export const ClassicHome: React.FC = () => {
 
   return (
     <div className="relative flex flex-col h-full bg-[var(--bg)] overflow-hidden">
-      <header className="flex justify-between items-center p-4 border-b border-[var(--muted)]/20">
+      <header className="flex justify-between items-center p-4 border-b border-[var(--border)]">
         <WalletPill />
         <button
           onClick={handleClose}
-          className="w-8 h-8 rounded-full bg-[var(--surface)] border border-[var(--muted)]/30 flex items-center justify-center text-[var(--text)]"
+          className="w-8 h-8 rounded-full bg-[var(--surface)] border border-[var(--border)] flex items-center justify-center text-[var(--text)]"
         >
           ✕
         </button>
@@ -69,7 +73,7 @@ export const ClassicHome: React.FC = () => {
       <main className="flex-1 overflow-y-auto pb-10">
         <BannerCarousel />
 
-        <div className="sticky top-0 bg-[var(--bg)]/90 backdrop-blur z-10 border-b border-[var(--muted)]/20 pb-2 mb-4">
+        <div className="sticky top-0 bg-[var(--bg)]/90 backdrop-blur z-10 border-b border-[var(--border)] pb-2 mb-4">
           <CategoryChips selectedCategory={selectedCategory} onSelect={setSelectedCategory} />
         </div>
 

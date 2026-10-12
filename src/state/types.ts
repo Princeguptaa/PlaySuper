@@ -48,6 +48,7 @@ export interface AnalyticsEvent {
   timestamp: number;
   player_id: string;
   session_id: string;
+  visit_id?: string;
   variant: 'classic' | 'goal';
   skin: 'neon' | 'jungle' | 'retail';
   coin_balance: number;
@@ -62,6 +63,7 @@ export interface AppState {
   orders: Order[];
   session: {
     id: string;
+    currentVisitId?: string | null;
     roundsPlayed: number;
     coinsHistory: number[];
     nudgesShown: number;

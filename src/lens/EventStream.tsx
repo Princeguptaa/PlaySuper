@@ -13,16 +13,16 @@ export const EventStream: React.FC = () => {
   const filteredEvents = (filter === 'all' ? events : events.filter(e => e.event_name === filter)).slice(0, 50);
   
   return (
-    <div className="bg-surface/10 border border-surface rounded-xl p-4 my-4 space-y-3">
+    <div className="bg-[var(--lens-surface)] border border-[var(--lens-border)] text-[var(--lens-text)] rounded-xl p-4 my-4 space-y-3">
       <div className="flex justify-between items-center pb-1">
-        <h3 className="font-bold text-sm text-white flex items-center space-x-2">
+        <h3 className="font-bold text-sm text-[var(--lens-text)] flex items-center space-x-2">
           <span>Live Event Stream</span>
-          <span className="text-xs text-[#a1a1aa] font-normal">({filteredEvents.length})</span>
+          <span className="text-xs text-[var(--lens-muted)] font-normal">({filteredEvents.length})</span>
         </h3>
         <select 
           value={filter} 
           onChange={e => setFilter(e.target.value)}
-          className="bg-background text-text text-xs py-1 px-2 rounded border border-surface focus:outline-none"
+          className="bg-[var(--lens-bg)] text-[var(--lens-text)] text-xs py-1 px-2 rounded border border-[var(--lens-border)] focus:outline-none"
         >
           <option value="all">All Events</option>
           {types.map(t => <option key={t} value={t}>{t}</option>)}
@@ -33,7 +33,7 @@ export const EventStream: React.FC = () => {
           <EventRow key={`${e.timestamp}-${e.event_name}-${idx}`} event={e} />
         ))}
         {filteredEvents.length === 0 && (
-          <div className="text-center text-[#a1a1aa] text-xs py-6">No events logged yet</div>
+          <div className="text-center text-[var(--lens-muted)] text-xs py-6">No events logged yet</div>
         )}
       </div>
     </div>
