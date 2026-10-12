@@ -59,11 +59,11 @@ export const LensPanel: React.FC = () => {
       </div>
 
       <HypothesisCard />
+      <EventStream />
       <EconomyMeter />
       <Simulator />
       <Funnel />
       <SkinSwitcher />
-      <EventStream />
       
       <div className="mt-8 pt-4 border-t border-surface flex flex-col gap-2">
         <button 

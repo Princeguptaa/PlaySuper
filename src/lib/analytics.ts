@@ -27,18 +27,20 @@ export function enrichAndLogEvent(
   return newEvents;
 }
 
-export function computeFunnel(events: AnalyticsEvent[], sessionId: string) {
-  const sessionEvents = events.filter(e => e.session_id === sessionId);
+export function computeFunnel(events: AnalyticsEvent[], sessionId?: string) {
+  const sessionEvents = (sessionId && events.some(e => e.session_id === sessionId))
+    ? events.filter(e => e.session_id === sessionId)
+    : events;
   
   const storeOpened = sessionEvents.filter(e => e.event_name === 'store_opened').length;
   const pdpViewed = sessionEvents.filter(e => e.event_name === 'pdp_viewed').length;
   const intent = sessionEvents.filter(e => ['goal_pinned', 'redeem_initiated', 'redeem_confirmed'].includes(e.event_name)).length;
   const redeemed = sessionEvents.filter(e => e.event_name === 'redeem_confirmed').length;
   const revealed = sessionEvents.filter(e => e.event_name === 'reward_revealed').length;
-  const returned = sessionEvents.filter(e => e.event_name === 'store_closed').length;
+  const returned = sessionEvents.filter(e => ['store_closed', 'round_started'].includes(e.event_name)).length;
 
   const steps = [
-    { name: 'Store open', count: storeOpened },
+    { name: 'Store opened', count: storeOpened },
     { name: 'Reward viewed', count: pdpViewed },
     { name: 'Goal pinned or Redeem started', count: intent },
     { name: 'Redeemed', count: redeemed },
@@ -48,7 +50,7 @@ export function computeFunnel(events: AnalyticsEvent[], sessionId: string) {
 
   return steps.map((step, i) => {
     const prevCount = i === 0 ? step.count : steps[i - 1].count;
-    const conversion = prevCount > 0 ? Math.round((step.count / prevCount) * 100) : (step.count > 0 ? 100 : 0);
+    const conversion = prevCount > 0 ? Math.round((step.count / prevCount) * 100) : 0;
     return { ...step, conversion };
   });
 }

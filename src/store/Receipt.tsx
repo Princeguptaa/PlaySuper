@@ -51,6 +51,11 @@ export const Receipt: React.FC = () => {
   };
   
   const handleBackToGame = () => {
+    logEvent({
+      event_name: 'store_closed',
+      return_to_game: true,
+      source: 'user',
+    });
     navigate('game');
   };
   

@@ -35,9 +35,13 @@ export const RoundEnd: React.FC<RoundEndProps> = ({ hits, combo, coinsEarned, on
       coins_earned: coinsEarned
     });
 
-    const evaluatedNudge = evaluateNudge(useAppStore.getState());
+    const evaluatedNudge = evaluateNudge(useAppStore.getState(), coinsEarned);
     if (evaluatedNudge) {
-      setNudge(evaluatedNudge);
+      if (coinsEarned === 0 && evaluatedNudge.type === 'N3_FIRST_GOAL') {
+        setNudge(null);
+      } else {
+        setNudge(evaluatedNudge);
+      }
     }
   }, [hits, combo, coinsEarned]);
 
@@ -67,10 +71,18 @@ export const RoundEnd: React.FC<RoundEndProps> = ({ hits, combo, coinsEarned, on
       </div>
       
       <div className="text-center mb-4">
-        <span className="text-[var(--muted)] text-sm block mb-1">You earned</span>
-        <div className="text-4xl font-display font-bold text-[var(--accent-coin)]">
-          +{coinsEarned}
-        </div>
+        {hits === 0 ? (
+          <p className="text-base font-medium text-[var(--muted)] px-4 py-2">
+            No hits this round. Tap the orbs to earn coins.
+          </p>
+        ) : (
+          <>
+            <span className="text-[var(--muted)] text-sm block mb-1">You earned</span>
+            <div className="text-4xl font-display font-bold text-[var(--accent-coin)]">
+              +{coinsEarned}
+            </div>
+          </>
+        )}
       </div>
 
       <div className="flex items-center justify-center gap-2 mb-4 text-sm text-[var(--muted)]">

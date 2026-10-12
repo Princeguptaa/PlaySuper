@@ -13,13 +13,22 @@ export const Simulator: React.FC = () => {
   // Derive outputs
   const dailyEarn = coinsPerRound * roundsPerDay;
   
-  const minPrice = Math.min(...SEED_CATALOGUE.map(r => r.priceCoins * priceMultiplier));
-  const everydayPrice = SEED_CATALOGUE.find(r => r.id === 'r01')?.priceCoins || 250;
-  const everydayAdjusted = everydayPrice * priceMultiplier;
+  const cheapestPrice = Math.min(...SEED_CATALOGUE.map(r => r.priceCoins));
+  const everydayPrices = SEED_CATALOGUE
+    .map(r => r.priceCoins)
+    .filter(p => p >= 400 && p <= 900)
+    .sort((a, b) => a - b);
   
-  const roundsToFirst = Math.ceil(minPrice / coinsPerRound);
-  const daysToFirst = +(roundsToFirst / roundsPerDay).toFixed(1);
-  const daysToEveryday = +(everydayAdjusted / dailyEarn).toFixed(1);
+  const mid = Math.floor(everydayPrices.length / 2);
+  const medianEverydayPrice = everydayPrices.length === 0
+    ? 650
+    : everydayPrices.length % 2 !== 0
+      ? everydayPrices[mid]
+      : (everydayPrices[mid - 1] + everydayPrices[mid]) / 2;
+
+  const n = Math.ceil((cheapestPrice * priceMultiplier) / coinsPerRound);
+  const timeToFirstReward = `${n} rounds (~${n * 0.5} min)`;
+  const daysToEverydayTier = ((medianEverydayPrice * priceMultiplier) / (coinsPerRound * roundsPerDay)).toFixed(1);
   
   // Simulation uses actual economy params but allows testing "what if"
   const handleSimulateRound = () => {
@@ -80,15 +89,21 @@ export const Simulator: React.FC = () => {
         </div>
       </div>
       
-      <div className="bg-background/50 rounded p-3 text-sm grid grid-cols-2 gap-y-2">
-        <div className="text-[#a1a1aa]">Daily Earn:</div>
-        <div className="text-right font-mono">{dailyEarn}</div>
+      <div className="bg-background/50 rounded p-3 text-sm space-y-2">
+        <div className="flex justify-between items-center gap-2">
+          <span className="text-[#a1a1aa]">Daily earn</span>
+          <span className="text-right font-mono font-medium text-white">{dailyEarn}</span>
+        </div>
         
-        <div className="text-[#a1a1aa]">First Reward in:</div>
-        <div className="text-right font-mono">{daysToFirst} days ({roundsToFirst} rnds)</div>
+        <div className="flex justify-between items-center gap-2">
+          <span className="text-[#a1a1aa]">Time to first reward</span>
+          <span className="text-right font-mono font-medium text-white">{timeToFirstReward}</span>
+        </div>
         
-        <div className="text-[#a1a1aa]">Everyday (Zomato) in:</div>
-        <div className="text-right font-mono">{daysToEveryday} days</div>
+        <div className="flex justify-between items-center gap-2">
+          <span className="text-[#a1a1aa]">Days to Everyday tier (400-900 coins)</span>
+          <span className="text-right font-mono font-medium text-white">{daysToEverydayTier}</span>
+        </div>
       </div>
       
       <button 

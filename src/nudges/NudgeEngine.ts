@@ -10,7 +10,7 @@ export interface NudgeResult {
   message: string;
 }
 
-export function evaluateNudge(state: AppState): NudgeResult | null {
+export function evaluateNudge(state: AppState, coinsThisRound?: number): NudgeResult | null {
   // Variant guard: Nudges only appear in Goal variant
   if (state.ui.variant !== 'goal') return null;
 
@@ -21,8 +21,14 @@ export function evaluateNudge(state: AppState): NudgeResult | null {
   const { balance, goalId, session } = state;
   const avgPerRound = avgCoinsPerRound(session.coinsHistory);
 
+  // Calculate coins earned this round
+  const earnedThisRound = coinsThisRound !== undefined
+    ? coinsThisRound
+    : (session.coinsHistory.length > 0 ? session.coinsHistory[session.coinsHistory.length - 1] : 0);
+
   // N3 First goal - after round 1, if no goal is pinned, show the "Pick your first goal" nudge
-  if (!goalId && session.roundsPlayed >= 1) {
+  // Do not show the first-goal nudge after a 0-coin round
+  if (!goalId && session.roundsPlayed >= 1 && earnedThisRound > 0) {
     const suggestion = SEED_CATALOGUE.find(r => r.tag === 'quick_win') || SEED_CATALOGUE[0];
     return {
       type: 'N3_FIRST_GOAL',
@@ -31,8 +37,6 @@ export function evaluateNudge(state: AppState): NudgeResult | null {
     };
   }
   
-  // Calculate coins earned this round (it's the last entry in coinsHistory)
-  const earnedThisRound = session.coinsHistory.length > 0 ? session.coinsHistory[session.coinsHistory.length - 1] : 0;
   const balanceBeforeRound = balance - earnedThisRound;
 
   // Find if any unredeemed reward was just crossed this round

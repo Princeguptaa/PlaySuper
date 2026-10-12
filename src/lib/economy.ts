@@ -1,6 +1,7 @@
 export function calculateCoins(hits: number, longestCombo: number): number {
+  if (hits === 0) return 0;
   const coins = hits * 4 + longestCombo * 2;
-  return Math.min(120, Math.max(50, coins));
+  return Math.min(120, Math.max(30, coins));
 }
 
 export function avgCoinsPerRound(history: number[]): number {

@@ -101,7 +101,7 @@ export const StoreHome: React.FC = () => {
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {rewards.map((reward) => (
-            <div key={reward.id} className="w-[140px] shrink-0 flex flex-col">
+            <div key={reward.id} className="min-w-[160px] w-[160px] shrink-0 flex flex-col">
               <RewardCard reward={reward} onClick={handleRewardClick} />
             </div>
           ))}

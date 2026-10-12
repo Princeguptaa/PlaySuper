@@ -1,45 +1,49 @@
 import React from 'react';
 import { useAppStore } from '../state/useAppStore';
 import { computeFunnel } from '../lib/analytics';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 export const Funnel: React.FC = () => {
   const events = useAppStore(state => state.events);
-  const sessionId = useAppStore(state => state.session.id);
-  
-  const data = computeFunnel(events, sessionId);
+  const data = computeFunnel(events);
+
+  const maxCount = Math.max(...data.map(d => d.count), 0);
 
   return (
-    <div className="bg-surface/10 border border-surface rounded-xl p-4 my-4">
-      <h3 className="font-bold mb-4">Funnel (This Session)</h3>
-      <div className="h-48">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} layout="vertical" margin={{ top: 0, right: 25, left: 10, bottom: 0 }}>
-            <XAxis type="number" hide />
-            <YAxis dataKey="name" type="category" width={145} tick={{ fontSize: 9, fill: '#a1a1aa' }} axisLine={false} tickLine={false} />
-            <Tooltip 
-              cursor={{ fill: 'var(--surface)' }}
-              content={({ active, payload }) => {
-                if (active && payload && payload.length) {
-                  const d = payload[0].payload;
-                  return (
-                    <div className="bg-[#111] border border-surface p-2 rounded text-xs">
-                      <div className="font-bold text-white">{d.name}</div>
-                      <div className="text-[#a1a1aa]">Count: {d.count}</div>
-                      <div className="text-success">Conv: {d.conversion}%</div>
-                    </div>
-                  );
-                }
-                return null;
-              }}
-            />
-            <Bar dataKey="count" radius={[0, 4, 4, 0]} barSize={16}>
-              {data.map((_, index) => (
-                <Cell key={`cell-${index}`} fill="var(--primary)" fillOpacity={0.8 - (index * 0.1)} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
+    <div className="bg-surface/10 border border-surface rounded-xl p-4 my-4 space-y-3">
+      <h3 className="font-bold text-sm text-white">Funnel</h3>
+      <div className="space-y-3">
+        {data.map((step, idx) => {
+          const barWidthPct = maxCount > 0 ? (step.count / maxCount) * 100 : 0;
+          const prevPct = idx === 0 
+            ? (step.count > 0 ? '100%' : '0%') 
+            : `${step.conversion}%`;
+
+          return (
+            <div key={step.name} className="space-y-1">
+              <div 
+                className="text-left font-medium text-white"
+                style={{ fontSize: '12px' }}
+              >
+                {step.name}
+              </div>
+              <div className="flex items-center gap-2.5">
+                <div className="flex-1 h-3.5 bg-surface/30 rounded overflow-hidden">
+                  <div
+                    className="h-full bg-primary rounded transition-all duration-300"
+                    style={{ width: `${barWidthPct}%` }}
+                  />
+                </div>
+                <div 
+                  className="font-mono text-white whitespace-nowrap shrink-0 text-right min-w-[70px]"
+                  style={{ fontSize: '12px' }}
+                >
+                  <span className="font-bold">{step.count}</span>{' '}
+                  <span className="text-[#a1a1aa] font-normal">({prevPct})</span>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

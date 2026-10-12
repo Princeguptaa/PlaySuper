@@ -9,9 +9,39 @@ const PLAY_AREA_W = 340;
 const PLAY_AREA_H = 460;
 const ORB_RADIUS = 30;
 
+function getNonOverlappingPosition(
+  existingOrbs: { x: number; y: number; radius?: number }[],
+  newRadius: number,
+  areaW: number,
+  areaH: number,
+  maxRetries = 10
+): { x: number; y: number } | null {
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    const x = Math.random() * (areaW - newRadius * 2);
+    const y = Math.random() * (areaH - newRadius * 2);
+    const newCx = x + newRadius;
+    const newCy = y + newRadius;
+
+    const overlaps = existingOrbs.some(orb => {
+      const orbRadius = orb.radius ?? newRadius;
+      const orbCx = orb.x + orbRadius;
+      const orbCy = orb.y + orbRadius;
+      const largerRadius = Math.max(newRadius, orbRadius);
+      const minDistance = 2 * largerRadius;
+      const dist = Math.hypot(newCx - orbCx, newCy - orbCy);
+      return dist < minDistance;
+    });
+
+    if (!overlaps) {
+      return { x, y };
+    }
+  }
+  return null;
+}
+
 export const PulseTap: React.FC<{ onRoundEnd: (hits: number, combo: number, coins: number) => void }> = ({ onRoundEnd }) => {
   const [timeLeft, setTimeLeft] = useState(GAME_DURATION);
-  const [orbs, setOrbs] = useState<{ id: string; x: number; y: number }[]>([]);
+  const [orbs, setOrbs] = useState<{ id: string; x: number; y: number; radius?: number }[]>([]);
   const [hits, setHits] = useState(0);
   const [currentCombo, setCurrentCombo] = useState(0);
   
@@ -35,24 +65,27 @@ export const PulseTap: React.FC<{ onRoundEnd: (hits: number, combo: number, coin
     let timerId: ReturnType<typeof setTimeout>;
     let active = true;
 
+    const spawnOrb = () => {
+      setOrbs(prev => {
+        const pos = getNonOverlappingPosition(prev, ORB_RADIUS, PLAY_AREA_W, PLAY_AREA_H, 10);
+        if (!pos) return prev;
+        const id = `orb-${orbIdCounter.current++}`;
+        return [...prev, { id, x: pos.x, y: pos.y, radius: ORB_RADIUS }];
+      });
+    };
+
     const scheduleNext = () => {
       const nextDelay = 400 + Math.random() * 300;
       timerId = setTimeout(() => {
         if (!active) return;
-        const id = `orb-${orbIdCounter.current++}`;
-        const x = Math.random() * (PLAY_AREA_W - ORB_RADIUS * 2);
-        const y = Math.random() * (PLAY_AREA_H - ORB_RADIUS * 2);
-        setOrbs(prev => [...prev, { id, x, y }]);
+        spawnOrb();
         scheduleNext();
       }, nextDelay);
     };
 
     timerId = setTimeout(() => {
       if (!active) return;
-      const id = `orb-${orbIdCounter.current++}`;
-      const x = Math.random() * (PLAY_AREA_W - ORB_RADIUS * 2);
-      const y = Math.random() * (PLAY_AREA_H - ORB_RADIUS * 2);
-      setOrbs(prev => [...prev, { id, x, y }]);
+      spawnOrb();
       scheduleNext();
     }, 400);
 
@@ -107,7 +140,7 @@ export const PulseTap: React.FC<{ onRoundEnd: (hits: number, combo: number, coin
             id={orb.id}
             x={orb.x}
             y={orb.y}
-            radius={ORB_RADIUS}
+            radius={orb.radius ?? ORB_RADIUS}
             onTap={handleOrbTap}
             onExpire={handleOrbExpire}
             lifetime={1400}

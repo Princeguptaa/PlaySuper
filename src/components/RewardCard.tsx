@@ -21,25 +21,28 @@ export const RewardCard: React.FC<RewardCardProps> = ({ reward, onClick }) => {
 
   return (
     <div 
-      className="bg-[var(--surface)] p-3 rounded-xl border border-[var(--muted)]/20 shadow-sm cursor-pointer flex flex-col justify-between h-full relative overflow-hidden"
+      className="bg-[var(--surface)] p-3 rounded-xl border border-[var(--muted)]/20 shadow-sm cursor-pointer flex flex-col justify-between h-full relative overflow-visible"
       onClick={() => onClick(reward.id)}
     >
       <div>
         <div className="flex items-start justify-between gap-1 mb-2">
           <div 
-            className="w-10 h-10 rounded-md shrink-0 flex items-center justify-center text-white font-bold mr-2"
+            className="w-10 h-10 rounded-md shrink-0 flex items-center justify-center text-white font-bold mr-1"
             style={{ backgroundColor: reward.brandColor }}
           >
             {reward.brand.charAt(0)}
           </div>
           {isRedeemed ? (
-            <div className="shrink-0 pt-0.5">
-              <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-zinc-600 text-zinc-200 inline-block text-center whitespace-nowrap">
+            <div className="shrink-0 pt-0.5 overflow-visible">
+              <span 
+                style={{ fontSize: '10px', padding: '2px 6px', whiteSpace: 'nowrap' }}
+                className="rounded-full text-[10px] font-bold uppercase tracking-wider bg-zinc-600 text-zinc-200 inline-block text-center whitespace-nowrap shrink-0 leading-none"
+              >
                 Redeemed
               </span>
             </div>
           ) : variant === 'goal' ? (
-            <div className="shrink-0 pt-0.5">
+            <div className="shrink-0 pt-0.5 overflow-visible">
               <StateBadge state={state} />
             </div>
           ) : null}

@@ -19,8 +19,14 @@ export const StateBadge: React.FC<StateBadgeProps> = ({ state }) => {
 
   return (
     <span
-      style={{ backgroundColor: bgColor, color: textColor }}
-      className="px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider inline-block text-center whitespace-nowrap"
+      style={{
+        backgroundColor: bgColor,
+        color: textColor,
+        fontSize: '10px',
+        padding: '2px 6px',
+        whiteSpace: 'nowrap',
+      }}
+      className="rounded-full text-[10px] font-bold uppercase tracking-wider inline-block text-center whitespace-nowrap shrink-0 leading-none"
     >
       {text}
     </span>
