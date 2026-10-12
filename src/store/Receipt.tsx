@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { useAppStore } from '../state/useAppStore';
 import { SEED_CATALOGUE } from '../lib/seed';
 import { nextGoalSuggestions } from '../lib/economy';
@@ -16,10 +16,28 @@ export const Receipt: React.FC = () => {
   const lastOrder = orders[orders.length - 1];
   const reward = SEED_CATALOGUE.find(r => r.id === lastOrder?.rewardId);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (bottomBarRef.current) {
       setBottomBarHeight(bottomBarRef.current.offsetHeight);
     }
+  }, []);
+
+  useEffect(() => {
+    const updateHeight = () => {
+      if (bottomBarRef.current) {
+        setBottomBarHeight(bottomBarRef.current.offsetHeight);
+      }
+    };
+    updateHeight();
+    const observer = new ResizeObserver(updateHeight);
+    if (bottomBarRef.current) {
+      observer.observe(bottomBarRef.current);
+    }
+    window.addEventListener('resize', updateHeight);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', updateHeight);
+    };
   }, []);
   
   useEffect(() => {
@@ -70,7 +88,7 @@ export const Receipt: React.FC = () => {
   return (
     <div className="relative flex flex-col h-full bg-[var(--bg)] overflow-hidden">
       <div 
-        className="flex-1 overflow-y-auto p-6"
+        className="flex-1 overflow-y-auto px-6 pt-6"
         style={{ paddingBottom: `${bottomBarHeight + 16}px` }}
       >
         <motion.div 

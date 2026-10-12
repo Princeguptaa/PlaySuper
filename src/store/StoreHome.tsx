@@ -49,6 +49,13 @@ export const StoreHome: React.FC = () => {
     }
   };
 
+  const handleGoalClaim = () => {
+    if (goalReward) {
+      useAppStore.setState({ ui: { ...useAppStore.getState().ui, selectedRewardId: goalReward.id } });
+      navigate('redeem_sheet');
+    }
+  };
+
   const handleRewardClick = (id: string) => {
     logEvent({
       event_name: 'reward_impression',
@@ -128,7 +135,7 @@ export const StoreHome: React.FC = () => {
 
       <main className="flex-1 overflow-y-auto pb-10">
         <div className="p-4">
-          <GoalCard reward={goalReward} onSelect={handleGoalSelect} />
+          <GoalCard reward={goalReward} onSelect={handleGoalSelect} onClaim={handleGoalClaim} />
         </div>
 
         {selectedCategory === 'All' && (

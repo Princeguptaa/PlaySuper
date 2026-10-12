@@ -2,17 +2,20 @@ import React from 'react';
 import { Reward } from '../state/types';
 import { ProgressRing } from './ProgressRing';
 import { EffortLabel } from './EffortLabel';
+import { Button } from './Button';
 import { useAppStore } from '../state/useAppStore';
 import { useAvgCoinsPerRound } from '../state/selectors';
 
 interface GoalCardProps {
   reward: Reward | null;
   onSelect: () => void;
+  onClaim?: () => void;
 }
 
-export const GoalCard: React.FC<GoalCardProps> = ({ reward, onSelect }) => {
+export const GoalCard: React.FC<GoalCardProps> = ({ reward, onSelect, onClaim }) => {
   const balance = useAppStore((s) => s.balance);
   const avgPerRound = useAppStore(useAvgCoinsPerRound);
+  const navigate = useAppStore((s) => s.navigate);
 
   if (!reward) {
     return (
@@ -23,6 +26,16 @@ export const GoalCard: React.FC<GoalCardProps> = ({ reward, onSelect }) => {
   }
 
   const remaining = Math.max(reward.priceCoins - balance, 0);
+
+  const handleClaim = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onClaim) {
+      onClaim();
+    } else {
+      useAppStore.setState({ ui: { ...useAppStore.getState().ui, selectedRewardId: reward.id } });
+      navigate('redeem_sheet');
+    }
+  };
 
   return (
     <div 
@@ -64,6 +77,16 @@ export const GoalCard: React.FC<GoalCardProps> = ({ reward, onSelect }) => {
           <EffortLabel price={reward.priceCoins} balance={balance} avgPerRound={avgPerRound} />
         </div>
       </div>
+      {remaining === 0 && (
+        <Button 
+          variant="primary" 
+          size="sm"
+          className="w-full mt-1"
+          onClick={handleClaim}
+        >
+          Claim now
+        </Button>
+      )}
     </div>
   );
 };

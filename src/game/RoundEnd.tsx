@@ -118,7 +118,9 @@ export const RoundEnd: React.FC<RoundEndProps> = ({ hits, combo, coinsEarned, on
 
           <div className="flex justify-between items-center text-[10px] text-[var(--muted)] font-medium">
             <span>🪙 {balance} / {goalReward.priceCoins}</span>
-            <span>{effortETA(goalReward.priceCoins, balance, avgPerRound)}</span>
+            {remainingCoins > 0 && (
+              <span>{effortETA(goalReward.priceCoins, balance, avgPerRound)}</span>
+            )}
           </div>
         </div>
       )}

@@ -5,8 +5,9 @@ export function calculateCoins(hits: number, longestCombo: number): number {
 }
 
 export function avgCoinsPerRound(history: number[]): number {
-  if (history.length === 0) return 70;
-  const recent = history.slice(-3);
+  const positive = history.filter(c => c > 0);
+  if (positive.length === 0) return 70;
+  const recent = positive.slice(-3);
   return recent.reduce((a, b) => a + b, 0) / recent.length;
 }
 
@@ -73,14 +74,24 @@ export function nextGoalSuggestions(
   if (sameCategoryUp) suggestions.push(sameCategoryUp);
 
   const quickWin = available
-    .filter(r => r.id !== sameCategoryUp?.id && r.priceCoins <= 900)
+    .filter(r => !suggestions.some(s => s.id === r.id) && r.priceCoins <= 900)
     .sort((a, b) => a.priceCoins - b.priceCoins)[0];
   if (quickWin) suggestions.push(quickWin);
 
   const aspirational = available
-    .filter(r => r.id !== sameCategoryUp?.id && r.id !== quickWin?.id && r.priceCoins >= 1000)
+    .filter(r => !suggestions.some(s => s.id === r.id) && r.priceCoins >= 1000)
     .sort((a, b) => a.priceCoins - b.priceCoins)[0];
   if (aspirational) suggestions.push(aspirational);
+
+  if (suggestions.length < 3) {
+    const remaining = available
+      .filter(r => !suggestions.some(s => s.id === r.id))
+      .sort((a, b) => a.priceCoins - b.priceCoins);
+    for (const r of remaining) {
+      suggestions.push(r);
+      if (suggestions.length === 3) break;
+    }
+  }
 
   return suggestions.slice(0, 3);
 }

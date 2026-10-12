@@ -1,18 +1,18 @@
 import React from 'react';
 import { useAppStore } from '../state/useAppStore';
-import { avgCoinsPerRound } from '../lib/economy';
+import { useAvgCoinsPerRound } from '../state/selectors';
 
 export const EconomyMeter: React.FC = () => {
   const ledger = useAppStore(state => state.ledger);
   const balance = useAppStore(state => state.balance);
-  const coinsHistory = useAppStore(state => state.session.coinsHistory);
+  const avgPerRound = useAppStore(useAvgCoinsPerRound);
   
   const totalEarned = ledger.filter(l => l.type === 'earn').reduce((sum, l) => sum + l.amount, 0);
   const totalSpent = ledger.filter(l => l.type === 'redeem').reduce((sum, l) => sum + l.amount, 0);
   
   const rawSink = totalEarned > 0 ? (totalSpent / totalEarned) * 100 : 0;
   const sinkRatio = Math.min(100, Math.max(0, rawSink));
-  const avgEarn = Math.round(coinsHistory.length > 0 ? avgCoinsPerRound(coinsHistory) : 70);
+  const avgEarn = Math.round(avgPerRound);
   
   const inBand = sinkRatio >= 40 && sinkRatio <= 70;
   const barColor = inBand ? 'bg-zinc-300' : 'bg-amber-500';

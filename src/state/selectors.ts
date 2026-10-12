@@ -1,5 +1,6 @@
 import { AppState } from './types';
 import { SEED_CATALOGUE } from '../lib/seed';
+import { avgCoinsPerRound } from '../lib/economy';
 
 export const useGoalReward = (state: AppState) => {
   if (!state.goalId) return null;
@@ -7,10 +8,7 @@ export const useGoalReward = (state: AppState) => {
 };
 
 export const useAvgCoinsPerRound = (state: AppState) => {
-  const history = state.session.coinsHistory;
-  if (history.length === 0) return 70;
-  const recent = history.slice(-3);
-  return recent.reduce((a, b) => a + b, 0) / recent.length;
+  return avgCoinsPerRound(state.session.coinsHistory);
 };
 
 export const useRewardState = (state: AppState, price: number) => {
